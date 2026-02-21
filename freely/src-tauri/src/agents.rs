@@ -10,6 +10,7 @@
 //! 4. Returns a collected Vec<StreamEvent> when the process exits
 
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 use std::process::Stdio;
 use tauri::{AppHandle, Emitter};
 use tokio::io::{AsyncBufReadExt, BufReader};
@@ -54,6 +55,7 @@ pub struct AgentPayload {
     pub working_directory: Option<String>,
     #[serde(rename = "apiKey")]
     pub api_key: Option<String>,
+    pub model: Option<String>,
 }
 
 // ============================================================================
@@ -213,6 +215,70 @@ pub async fn open_terminal_for_login() -> Result<(), String> {
 }
 
 // ============================================================================
+// .env file loading
+// ============================================================================
+
+/// Load environment variables from a `.env` file in the app's config directory.
+/// Returns a HashMap of key-value pairs. Missing file is not an error (returns empty map).
+///
+/// Search order:
+/// 1. CWD (for development: `freely/.env`)
+/// 2. Platform config dir: `~/.config/freely/.env` (Linux/macOS) or `%APPDATA%/freely/.env` (Windows)
+#[tauri::command]
+pub async fn load_env_file() -> Result<HashMap<String, String>, String> {
+    let mut vars = HashMap::new();
+
+    // Candidate paths
+    let mut candidates: Vec<std::path::PathBuf> = Vec::new();
+
+    // 1. CWD/.env (developer convenience)
+    candidates.push(std::path::PathBuf::from(".env"));
+
+    // 2. Platform config dir
+    if let Some(home) = std::env::var("HOME").ok().or_else(|| std::env::var("USERPROFILE").ok()) {
+        #[cfg(target_os = "windows")]
+        if let Ok(appdata) = std::env::var("APPDATA") {
+            candidates.push(std::path::PathBuf::from(format!("{}/freely/.env", appdata)));
+        }
+        #[cfg(not(target_os = "windows"))]
+        {
+            candidates.push(std::path::PathBuf::from(format!("{}/.config/freely/.env", home)));
+        }
+    }
+
+    // Find first existing file and parse it
+    for path in candidates {
+        if path.exists() {
+            let content = std::fs::read_to_string(&path)
+                .map_err(|e| format!("Failed to read {}: {}", path.display(), e))?;
+
+            for line in content.lines() {
+                let trimmed = line.trim();
+                // Skip empty lines and comments
+                if trimmed.is_empty() || trimmed.starts_with('#') {
+                    continue;
+                }
+                // Parse KEY=VALUE (with optional quotes)
+                if let Some((key, value)) = trimmed.split_once('=') {
+                    let key = key.trim().to_string();
+                    let mut value = value.trim().to_string();
+                    // Strip surrounding quotes
+                    if (value.starts_with('"') && value.ends_with('"'))
+                        || (value.starts_with('\'') && value.ends_with('\''))
+                    {
+                        value = value[1..value.len() - 1].to_string();
+                    }
+                    vars.insert(key, value);
+                }
+            }
+            break; // Use only the first file found
+        }
+    }
+
+    Ok(vars)
+}
+
+// ============================================================================
 // Run Claude CLI
 // ============================================================================
 
@@ -235,6 +301,10 @@ pub async fn run_claude(
         .arg("--output-format")
         .arg("stream-json")
         .arg("--verbose");
+
+    if let Some(ref model) = payload.model {
+        cmd.arg("--model").arg(model);
+    }
 
     if let Some(ref perm) = payload.permission_mode {
         cmd.arg("--allowedTools").arg(perm);

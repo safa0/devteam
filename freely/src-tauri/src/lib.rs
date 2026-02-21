@@ -119,6 +119,7 @@ pub fn run() {
             agents::check_tool_installed,
             agents::check_claude_authenticated,
             agents::open_terminal_for_login,
+            agents::load_env_file,
             agents::run_claude,
             agents::run_codex,
             agents::run_gemini,

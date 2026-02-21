@@ -1,9 +1,11 @@
 import {
   AI_PROVIDERS,
+  AGENT_PROVIDERS,
   DEFAULT_SYSTEM_PROMPT,
   SPEECH_TO_TEXT_PROVIDERS,
   STORAGE_KEYS,
 } from "@/config";
+import { freelyAgentOrchestrator } from "@/lib/agents";
 import { getPlatform, safeLocalStorage, trackAppStart } from "@/lib";
 import { getShortcutsConfig } from "@/lib/storage";
 import {
@@ -329,6 +331,93 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   // Load data on mount
   useEffect(() => {
     const initializeApp = async () => {
+      // Load .env file (developer config fallback)
+      try {
+        const env = await invoke<Record<string, string>>("load_env_file");
+        if (env && Object.keys(env).length > 0) {
+          // Map provider IDs to their env var → curl variable mappings
+          const envKeyMap: Record<string, { envKey: string; varKey: string }[]> = {
+            openai: [{ envKey: "OPENAI_API_KEY", varKey: "api_key" }],
+            claude: [{ envKey: "ANTHROPIC_API_KEY", varKey: "api_key" }],
+            gemini: [{ envKey: "GOOGLE_API_KEY", varKey: "api_key" }],
+            grok: [{ envKey: "XAI_API_KEY", varKey: "api_key" }],
+            groq: [{ envKey: "GROQ_API_KEY", varKey: "api_key" }],
+            mistral: [{ envKey: "MISTRAL_API_KEY", varKey: "api_key" }],
+            cohere: [{ envKey: "COHERE_API_KEY", varKey: "api_key" }],
+            perplexity: [{ envKey: "PERPLEXITY_API_KEY", varKey: "api_key" }],
+            openrouter: [{ envKey: "OPENROUTER_API_KEY", varKey: "api_key" }],
+            codex: [{ envKey: "OPENAI_API_KEY", varKey: "OPENAI_API_KEY" }],
+            "gemini-sdk": [{ envKey: "GOOGLE_API_KEY", varKey: "GOOGLE_API_KEY" }],
+          };
+
+          // STT provider env mappings
+          const sttEnvKeyMap: Record<string, { envKey: string; varKey: string }[]> = {
+            "openai-whisper": [{ envKey: "OPENAI_API_KEY", varKey: "api_key" }],
+            groq: [{ envKey: "GROQ_API_KEY", varKey: "api_key" }],
+            "deepgram-stt": [{ envKey: "DEEPGRAM_API_KEY", varKey: "api_key" }],
+            "elevenlabs-stt": [{ envKey: "ELEVENLABS_API_KEY", varKey: "api_key" }],
+            "azure-stt": [{ envKey: "AZURE_SPEECH_KEY", varKey: "api_key" }],
+            "google-stt": [{ envKey: "GOOGLE_API_KEY", varKey: "api_key" }],
+          };
+
+          /** Backfill empty vars from .env for a given provider + mapping */
+          const backfillVars = (
+            provider: string,
+            existingVars: Record<string, string>,
+            keyMap: Record<string, { envKey: string; varKey: string }[]>
+          ): { vars: Record<string, string>; changed: boolean } => {
+            const merged = { ...existingVars };
+            let changed = false;
+            const mappings = keyMap[provider] || [];
+            for (const { envKey, varKey } of mappings) {
+              if (!merged[varKey] && env[envKey]) {
+                merged[varKey] = env[envKey];
+                changed = true;
+              }
+            }
+            return { vars: merged, changed };
+          };
+
+          // --- AI Provider ---
+          const savedProvider = safeLocalStorage.getItem(STORAGE_KEYS.SELECTED_AI_PROVIDER);
+          if (!savedProvider) {
+            const defaultProvider = env.FREELY_DEFAULT_PROVIDER;
+            if (defaultProvider) {
+              const { vars } = backfillVars(defaultProvider, {}, envKeyMap);
+              setSelectedAIProvider({ provider: defaultProvider, variables: vars });
+            }
+          } else {
+            try {
+              const parsed = JSON.parse(savedProvider);
+              const { vars, changed } = backfillVars(parsed.provider, parsed.variables || {}, envKeyMap);
+              if (changed) {
+                setSelectedAIProvider({ provider: parsed.provider, variables: vars });
+              }
+            } catch { /* ignore */ }
+          }
+
+          // --- STT Provider ---
+          const savedStt = safeLocalStorage.getItem(STORAGE_KEYS.SELECTED_STT_PROVIDER);
+          if (!savedStt) {
+            const defaultStt = env.FREELY_DEFAULT_STT_PROVIDER;
+            if (defaultStt) {
+              const { vars } = backfillVars(defaultStt, {}, sttEnvKeyMap);
+              setSelectedSttProvider({ provider: defaultStt, variables: vars });
+            }
+          } else {
+            try {
+              const parsed = JSON.parse(savedStt);
+              const { vars, changed } = backfillVars(parsed.provider, parsed.variables || {}, sttEnvKeyMap);
+              if (changed) {
+                setSelectedSttProvider({ provider: parsed.provider, variables: vars });
+              }
+            } catch { /* ignore */ }
+          }
+        }
+      } catch (error) {
+        console.debug("No .env file loaded (this is normal):", error);
+      }
+
       // Load license and data
       await getActiveLicenseStatus();
 
@@ -508,11 +597,16 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [selectedSttProvider]);
 
-  // Computed all AI providers
+  // Computed all AI providers (curl-based + agent-backed + custom)
   const allAiProviders: TYPE_PROVIDER[] = [
     ...AI_PROVIDERS,
+    ...AGENT_PROVIDERS,
     ...customAiProviders,
   ];
+
+  /** Returns true if the given provider ID is handled by the agent orchestrator */
+  const isAgentProvider = (id: string): boolean =>
+    freelyAgentOrchestrator.isAgentProvider(id);
 
   // Computed all STT providers
   const allSttProviders: TYPE_PROVIDER[] = [
@@ -660,6 +754,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     customAiProviders,
     selectedAIProvider,
     onSetSelectedAIProvider,
+    isAgentProvider,
     allSttProviders,
     customSttProviders,
     selectedSttProvider,
