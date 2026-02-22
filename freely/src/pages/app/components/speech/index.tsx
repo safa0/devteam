@@ -138,9 +138,7 @@ export const SystemAudio = (props: useSystemAudioType) => {
       }
 
       // Capture screenshot
-      const base64: string = await invoke("capture_screenshot", {
-        screenId: null, // Use default screen
-      });
+      const base64: string = await invoke("capture_to_base64");
 
       setScreenshotImage(base64);
     } catch (err) {

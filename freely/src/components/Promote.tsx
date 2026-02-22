@@ -32,24 +32,24 @@ const Promote = () => {
             Promote Pluely, Earn Rewards
           </CardTitle>
           <CardDescription className="text-[10px] lg:text-xs">
-            Share Pluely on social, hit 5K impressions, and we&apos;ll send you
+            Share Freely on social, hit 5K impressions, and we&apos;ll send you
             a $5&ndash;$10 coupon for a monthly plan. Email your post link to{" "}
             <a
               className="text-primary underline underline-offset-4"
-              href="mailto:support@pluely.com"
+              href="mailto:support@freely.app"
             >
-              support@pluely.com
+              support@freely.app
             </a>
             .
           </CardDescription>
         </div>
         <Button asChild className="w-full md:w-auto text-[10px] lg:text-xs">
           <a
-            href="https://pluely.com/promote"
+            href="https://freely.app/promote"
             rel="noopener noreferrer"
             target="_blank"
           >
-            Pluely.com/promote
+            freely.app/promote
           </a>
         </Button>
       </CardContent>

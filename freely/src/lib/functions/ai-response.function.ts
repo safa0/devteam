@@ -14,6 +14,10 @@ import { shouldUsePluelyAPI } from "./pluely.api";
 import { CHUNK_POLL_INTERVAL_MS } from "../chat-constants";
 import { getResponseSettings, RESPONSE_LENGTHS, LANGUAGES } from "@/lib";
 import { MARKDOWN_FORMATTING_INSTRUCTIONS } from "@/config/constants";
+import {
+  freelyAgentOrchestrator,
+  type AgentProviderId,
+} from "@/lib/agents";
 
 function buildEnhancedSystemPrompt(baseSystemPrompt?: string): string {
   const responseSettings = getResponseSettings();
@@ -190,6 +194,35 @@ export async function* fetchAIResponse(params: {
     }
 
     const enhancedSystemPrompt = buildEnhancedSystemPrompt(systemPrompt);
+
+    // Route agent-backed providers (claude-code, codex, gemini-sdk) to orchestrator
+    if (
+      selectedProvider.provider &&
+      freelyAgentOrchestrator.isAgentProvider(selectedProvider.provider)
+    ) {
+      const apiKey =
+        selectedProvider.variables?.OPENAI_API_KEY ||
+        selectedProvider.variables?.GOOGLE_API_KEY ||
+        selectedProvider.variables?.api_key;
+
+      const model =
+        selectedProvider.variables?.MODEL ||
+        selectedProvider.variables?.model;
+
+      yield* freelyAgentOrchestrator.execute({
+        toolType: selectedProvider.provider as AgentProviderId,
+        userMessage,
+        systemPrompt: enhancedSystemPrompt,
+        history: history.map((m) => ({
+          role: m.role as "user" | "assistant" | "system",
+          content: typeof m.content === "string" ? m.content : "",
+        })),
+        apiKey,
+        model,
+        signal,
+      });
+      return;
+    }
 
     // Check if we should use Pluely API instead
     const usePluelyAPI = await shouldUsePluelyAPI();

@@ -61,6 +61,7 @@ export const useChatCompletion = (
     allSttProviders,
     selectedAudioDevices,
     hasActiveLicense,
+    isAgentProvider,
   } = useApp();
 
   const [state, setState] = useState<ChatCompletionState>({
@@ -175,6 +176,8 @@ export const useChatCompletion = (
         }
 
         const usePluelyAPI = await shouldUsePluelyAPI();
+        const usingAgentProvider = isAgentProvider(selectedAIProvider.provider);
+
         // Check if AI provider is configured
         if (!selectedAIProvider.provider && !usePluelyAPI) {
           setState((prev) => ({
@@ -184,10 +187,11 @@ export const useChatCompletion = (
           return;
         }
 
+        // Agent-backed providers don't require a curl definition
         const provider = allAiProviders.find(
           (p) => p.id === selectedAIProvider.provider
         );
-        if (!provider && !usePluelyAPI) {
+        if (!provider && !usePluelyAPI && !usingAgentProvider) {
           setState((prev) => ({
             ...prev,
             error: "Invalid provider selected",
@@ -225,9 +229,10 @@ export const useChatCompletion = (
         let fullResponse = "";
 
         try {
-          // Use the fetchAIResponse function with signal
+          // Use the fetchAIResponse function with signal.
+          // Agent-backed providers are routed inside fetchAIResponse via the orchestrator.
           for await (const chunk of fetchAIResponse({
-            provider: usePluelyAPI ? undefined : provider,
+            provider: usePluelyAPI || usingAgentProvider ? undefined : provider,
             selectedProvider: selectedAIProvider,
             systemPrompt: systemPrompt || undefined,
             history: messageHistory,
@@ -567,7 +572,7 @@ export const useChatCompletion = (
             setState((prev) => ({
               ...prev,
               error:
-                "Screen Recording permission required. Please enable it by going to System Settings > Privacy & Security > Screen & System Audio Recording. If you don't see Pluely in the list, click the '+' button to add it. If it's already listed, make sure it's enabled. Then restart the app.",
+                "Screen Recording permission required. Please enable it by going to System Settings > Privacy & Security > Screen & System Audio Recording. If you don't see Freely in the list, click the '+' button to add it. If it's already listed, make sure it's enabled. Then restart the app.",
             }));
             setIsScreenshotLoading(false);
             screenshotInitiatedByThisContext.current = false;

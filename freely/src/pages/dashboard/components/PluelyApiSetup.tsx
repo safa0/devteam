@@ -468,7 +468,7 @@ export const PluelyApiSetup = () => {
                 <div className="-mt-1">
                   <p className="text-sm font-medium text-muted-foreground select-auto">
                     If you need any help or any assistance, contact
-                    support@pluely.com
+                    support@freely.app
                   </p>
                 </div>
               ) : null}
