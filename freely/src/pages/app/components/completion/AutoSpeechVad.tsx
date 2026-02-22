@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Button } from "@/components";
 import { useApp } from "@/contexts";
 import { floatArrayToWav } from "@/lib/utils";
+import { useDeepgramStreaming } from "@/hooks/useDeepgramStreaming";
 
 interface AutoSpeechVADProps {
   submit: UseCompletionReturn["submit"];
@@ -21,7 +22,29 @@ const AutoSpeechVADInternal = ({
   microphoneDeviceId,
 }: AutoSpeechVADProps) => {
   const [isTranscribing, setIsTranscribing] = useState(false);
+  const [interimTranscript, setInterimTranscript] = useState("");
   const { selectedSttProvider, allSttProviders } = useApp();
+
+  const providerConfig = allSttProviders.find(
+    (p) => p.id === selectedSttProvider.provider
+  );
+
+  const isDeepgramStreaming =
+    providerConfig?.streaming === true &&
+    selectedSttProvider.provider === "deepgram-stt" &&
+    !!selectedSttProvider.variables.api_key;
+
+  const { sendPcmFrame, finalize, isConnected } = useDeepgramStreaming({
+    apiKey: selectedSttProvider.variables.api_key ?? "",
+    model: selectedSttProvider.variables.model ?? "nova-2",
+    onInterimTranscript: setInterimTranscript,
+    onFinalTranscript: (text) => {
+      if (text.trim()) submit(text);
+      setInterimTranscript("");
+      setIsTranscribing(false);
+    },
+    enabled: isDeepgramStreaming,
+  });
 
   const audioConstraints: MediaTrackConstraints =
     microphoneDeviceId && microphoneDeviceId !== "default"
@@ -32,7 +55,18 @@ const AutoSpeechVADInternal = ({
     userSpeakingThreshold: 0.6,
     startOnLoad: true,
     additionalAudioConstraints: audioConstraints,
+    onSpeechStart: () => {
+      if (isDeepgramStreaming) setInterimTranscript("");
+    },
+    onFrameProcessed: (_probabilities, frame) => {
+      if (isDeepgramStreaming && isConnected) sendPcmFrame(frame);
+    },
     onSpeechEnd: async (audio) => {
+      if (isDeepgramStreaming && isConnected) {
+        setIsTranscribing(true);
+        finalize();
+        return;
+      }
       try {
         // convert float32array to blob
         const audioBlob = floatArrayToWav(audio, 16000, "wav");
@@ -40,26 +74,12 @@ const AutoSpeechVADInternal = ({
         let transcription: string;
 
         // Check if we have a configured speech provider
-        if (!selectedSttProvider.provider) {
+        if (!selectedSttProvider.provider || !providerConfig) {
           console.warn("No speech provider selected");
           setState((prev: any) => ({
             ...prev,
             error:
               "No speech provider selected. Please select one in settings.",
-          }));
-          return;
-        }
-
-        const providerConfig = allSttProviders.find(
-          (p) => p.id === selectedSttProvider.provider
-        );
-
-        if (!providerConfig) {
-          console.warn("Selected speech provider configuration not found");
-          setState((prev: any) => ({
-            ...prev,
-            error:
-              "Speech provider configuration not found. Please check your settings.",
           }));
           return;
         }
@@ -91,6 +111,11 @@ const AutoSpeechVADInternal = ({
 
   return (
     <>
+      {interimTranscript && (
+        <span className="text-xs text-muted-foreground truncate max-w-[200px]">
+          {interimTranscript}
+        </span>
+      )}
       <Button
         size="icon"
         onClick={() => {

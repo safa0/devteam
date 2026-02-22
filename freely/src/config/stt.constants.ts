@@ -60,7 +60,7 @@ export const SPEECH_TO_TEXT_PROVIDERS = [
       -H "Content-Type: audio/wav" \\
       --data-binary {{AUDIO}}`,
     responseContentPath: "results.channels[0].alternatives[0].transcript",
-    streaming: false,
+    streaming: true,
   },
   {
     id: "azure-stt",
