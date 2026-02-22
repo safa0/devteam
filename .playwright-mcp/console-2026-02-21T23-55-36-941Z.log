@@ -1,0 +1,106 @@
+[     461ms] TypeError: Cannot read properties of undefined (reading 'metadata')
+    at getCurrentWindow (http://localhost:1420/node_modules/.vite/deps/chunk-25T2DHJD.js?v=6d86075a:327:48)
+    at http://localhost:1420/src/main.tsx:9:23
+[   40003ms] [ERROR] WebSocket connection to 'ws://localhost:1420/?token=Q4Ez_Da-Hl2l' failed:  @ http://localhost:1420/@vite/client:744
+[   52411ms] TypeError: Cannot read properties of undefined (reading 'metadata')
+    at getCurrentWindow (http://localhost:1420/node_modules/.vite/deps/chunk-25T2DHJD.js?v=6d86075a:327:48)
+    at http://localhost:1420/src/main.tsx:9:23
+[  159941ms] TypeError: Cannot read properties of undefined (reading 'metadata')
+    at getCurrentWindow (http://localhost:1420/node_modules/.vite/deps/chunk-25T2DHJD.js?v=6d86075a:327:48)
+    at http://localhost:1420/src/main.tsx?t=1771718295956:9:23
+[  470527ms] TypeError: Cannot read properties of undefined (reading 'metadata')
+    at getCurrentWindow (http://localhost:1420/node_modules/.vite/deps/chunk-25T2DHJD.js?v=6d86075a:327:48)
+    at http://localhost:1420/src/main.tsx?t=1771718602896:9:23
+[ 1116833ms] TypeError: Cannot read properties of undefined (reading 'metadata')
+    at getCurrentWindow (http://localhost:1420/node_modules/.vite/deps/chunk-25T2DHJD.js?v=6d86075a:327:48)
+    at http://localhost:1420/src/main.tsx?t=1771719250935:9:23
+[ 1124587ms] TypeError: Cannot read properties of undefined (reading 'metadata')
+    at getCurrentWindow (http://localhost:1420/node_modules/.vite/deps/chunk-25T2DHJD.js?v=6d86075a:327:48)
+    at http://localhost:1420/src/main.tsx?t=1771719260445:9:23
+[ 1132599ms] TypeError: Cannot read properties of undefined (reading 'metadata')
+    at getCurrentWindow (http://localhost:1420/node_modules/.vite/deps/chunk-25T2DHJD.js?v=6d86075a:327:48)
+    at http://localhost:1420/src/main.tsx?t=1771719268945:9:23
+[ 1250327ms] TypeError: Cannot read properties of undefined (reading 'metadata')
+    at getCurrentWindow (http://localhost:1420/node_modules/.vite/deps/chunk-25T2DHJD.js?v=6d86075a:327:48)
+    at http://localhost:1420/src/main.tsx?t=1771719385951:9:23
+[ 1252518ms] TypeError: Cannot read properties of undefined (reading 'metadata')
+    at getCurrentWindow (http://localhost:1420/node_modules/.vite/deps/chunk-25T2DHJD.js?v=6d86075a:327:48)
+    at http://localhost:1420/src/main.tsx?t=1771719388588:9:23
+[ 1256513ms] TypeError: Cannot read properties of undefined (reading 'metadata')
+    at getCurrentWindow (http://localhost:1420/node_modules/.vite/deps/chunk-25T2DHJD.js?v=6d86075a:327:48)
+    at http://localhost:1420/src/main.tsx?t=1771719392090:9:23
+[ 1260942ms] TypeError: Cannot read properties of undefined (reading 'metadata')
+    at getCurrentWindow (http://localhost:1420/node_modules/.vite/deps/chunk-25T2DHJD.js?v=6d86075a:327:48)
+    at http://localhost:1420/src/main.tsx?t=1771719396449:9:23
+[ 1262938ms] TypeError: Cannot read properties of undefined (reading 'metadata')
+    at getCurrentWindow (http://localhost:1420/node_modules/.vite/deps/chunk-25T2DHJD.js?v=6d86075a:327:48)
+    at http://localhost:1420/src/main.tsx?t=1771719398816:9:23
+[ 1265130ms] TypeError: Cannot read properties of undefined (reading 'metadata')
+    at getCurrentWindow (http://localhost:1420/node_modules/.vite/deps/chunk-25T2DHJD.js?v=6d86075a:327:48)
+    at http://localhost:1420/src/main.tsx?t=1771719401253:9:23
+[ 1272118ms] TypeError: Cannot read properties of undefined (reading 'metadata')
+    at getCurrentWindow (http://localhost:1420/node_modules/.vite/deps/chunk-25T2DHJD.js?v=6d86075a:327:48)
+    at http://localhost:1420/src/main.tsx?t=1771719407748:9:23
+[ 1274447ms] TypeError: Cannot read properties of undefined (reading 'metadata')
+    at getCurrentWindow (http://localhost:1420/node_modules/.vite/deps/chunk-25T2DHJD.js?v=6d86075a:327:48)
+    at http://localhost:1420/src/main.tsx?t=1771719410432:9:23
+[ 1278906ms] [ERROR] [vite] SyntaxError: The requested module '/src/lib/functions/pluely.api.ts?t=1771719415704' does not provide an export named 'shouldUsePluelyAPI' @ http://localhost:1420/@vite/client:808
+[ 1278907ms] [ERROR] [vite] Failed to reload /src/pages/audio/components/AudioSelection.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 1278907ms] [ERROR] [vite] SyntaxError: The requested module '/src/lib/functions/pluely.api.ts?t=1771719415704' does not provide an export named 'shouldUsePluelyAPI' @ http://localhost:1420/@vite/client:808
+[ 1278907ms] [ERROR] [vite] Failed to reload /src/pages/app/components/completion/AutoSpeechVad.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 1278907ms] [ERROR] [vite] SyntaxError: The requested module '/src/lib/functions/pluely.api.ts?t=1771719415704' does not provide an export named 'shouldUsePluelyAPI' @ http://localhost:1420/@vite/client:808
+[ 1278907ms] [ERROR] [vite] Failed to reload /src/components/GetLicense.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 1278907ms] [ERROR] [vite] SyntaxError: The requested module '/src/lib/functions/pluely.api.ts?t=1771719415704' does not provide an export named 'shouldUsePluelyAPI' @ http://localhost:1420/@vite/client:808
+[ 1278907ms] [ERROR] [vite] Failed to reload /src/components/updater/index.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 1278907ms] [ERROR] [vite] SyntaxError: The requested module '/src/lib/functions/pluely.api.ts?t=1771719415704' does not provide an export named 'shouldUsePluelyAPI' @ http://localhost:1420/@vite/client:808
+[ 1278907ms] [ERROR] [vite] Failed to reload /src/pages/responses/components/ResponseLength.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 1278907ms] [ERROR] [vite] SyntaxError: The requested module '/src/lib/functions/pluely.api.ts?t=1771719415704' does not provide an export named 'shouldUsePluelyAPI' @ http://localhost:1420/@vite/client:808
+[ 1278907ms] [ERROR] [vite] Failed to reload /src/components/Markdown/copy-button.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 1278907ms] [ERROR] [vite] SyntaxError: The requested module '/src/lib/functions/pluely.api.ts?t=1771719415704' does not provide an export named 'shouldUsePluelyAPI' @ http://localhost:1420/@vite/client:808
+[ 1278907ms] [ERROR] [vite] Failed to reload /src/pages/system-prompts/PluelyPrompts.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 1278907ms] [ERROR] [vite] SyntaxError: The requested module '/src/lib/functions/pluely.api.ts?t=1771719415704' does not provide an export named 'shouldUsePluelyAPI' @ http://localhost:1420/@vite/client:808
+[ 1278907ms] [ERROR] [vite] Failed to reload /src/pages/dev/components/ai-configs/CreateEditProvider.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 1278908ms] [ERROR] [vite] SyntaxError: The requested module '/src/lib/functions/pluely.api.ts?t=1771719415704' does not provide an export named 'shouldUsePluelyAPI' @ http://localhost:1420/@vite/client:808
+[ 1278908ms] [ERROR] [vite] Failed to reload /src/pages/chats/components/AudioRecorder.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 1278908ms] [ERROR] [vite] SyntaxError: The requested module '/src/lib/functions/pluely.api.ts?t=1771719415704' does not provide an export named 'shouldUsePluelyAPI' @ http://localhost:1420/@vite/client:808
+[ 1278908ms] [ERROR] [vite] Failed to reload /src/pages/responses/components/AutoScrollToggle.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 1278908ms] [ERROR] [vite] SyntaxError: The requested module '/src/lib/functions/pluely.api.ts?t=1771719415704' does not provide an export named 'shouldUsePluelyAPI' @ http://localhost:1420/@vite/client:808
+[ 1278908ms] [ERROR] [vite] Failed to reload /src/pages/dev/components/stt-configs/CreateEditProvider.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 1278908ms] [ERROR] [vite] SyntaxError: The requested module '/src/lib/functions/pluely.api.ts?t=1771719415704' does not provide an export named 'shouldUsePluelyAPI' @ http://localhost:1420/@vite/client:808
+[ 1278908ms] [ERROR] [vite] Failed to reload /src/pages/shortcuts/components/shortcuts/ShortcutManager.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 1278908ms] [ERROR] [vite] SyntaxError: The requested module '/src/lib/functions/pluely.api.ts?t=1771719415704' does not provide an export named 'shouldUsePluelyAPI' @ http://localhost:1420/@vite/client:808
+[ 1278908ms] [ERROR] [vite] Failed to reload /src/pages/audio/index.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 1278908ms] [ERROR] [vite] SyntaxError: The requested module '/src/lib/functions/pluely.api.ts?t=1771719415704' does not provide an export named 'shouldUsePluelyAPI' @ http://localhost:1420/@vite/client:808
+[ 1278908ms] [ERROR] [vite] Failed to reload /src/pages/screenshot/index.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 1278908ms] [ERROR] [vite] SyntaxError: The requested module '/src/lib/functions/pluely.api.ts?t=1771719415704' does not provide an export named 'shouldUsePluelyAPI' @ http://localhost:1420/@vite/client:808
+[ 1278908ms] [ERROR] [vite] Failed to reload /src/pages/shortcuts/components/shortcuts/ShortcutRecorder.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 1278908ms] [ERROR] [vite] SyntaxError: The requested module '/src/lib/functions/pluely.api.ts?t=1771719415704' does not provide an export named 'shouldUsePluelyAPI' @ http://localhost:1420/@vite/client:808
+[ 1278908ms] [ERROR] [vite] Failed to reload /src/components/DragButton.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 1278908ms] [ERROR] [vite] SyntaxError: The requested module '/src/lib/functions/pluely.api.ts?t=1771719415704' does not provide an export named 'shouldUsePluelyAPI' @ http://localhost:1420/@vite/client:808
+[ 1278908ms] [ERROR] [vite] Failed to reload /src/pages/chats/index.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 1278909ms] [ERROR] [vite] SyntaxError: The requested module '/src/lib/functions/pluely.api.ts?t=1771719415704' does not provide an export named 'shouldUsePluelyAPI' @ http://localhost:1420/@vite/client:808
+[ 1278909ms] [ERROR] [vite] Failed to reload /src/pages/responses/components/LanguageSelector.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 1278909ms] [ERROR] [vite] SyntaxError: The requested module '/src/lib/functions/pluely.api.ts?t=1771719415704' does not provide an export named 'shouldUsePluelyAPI' @ http://localhost:1420/@vite/client:808
+[ 1278909ms] [ERROR] [vite] Failed to reload /src/pages/dev/components/ai-configs/CustomProvider.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 1278909ms] [ERROR] [vite] SyntaxError: The requested module '/src/lib/functions/pluely.api.ts?t=1771719415704' does not provide an export named 'shouldUsePluelyAPI' @ http://localhost:1420/@vite/client:808
+[ 1278909ms] [ERROR] [vite] Failed to reload /src/pages/shortcuts/components/Cursor.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 1278909ms] [ERROR] [vite] SyntaxError: The requested module '/src/lib/functions/pluely.api.ts?t=1771719415704' does not provide an export named 'shouldUsePluelyAPI' @ http://localhost:1420/@vite/client:808
+[ 1278909ms] [ERROR] [vite] Failed to reload /src/pages/dev/components/stt-configs/CustomProvider.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 1278909ms] [ERROR] [vite] SyntaxError: The requested module '/src/lib/functions/pluely.api.ts?t=1771719415704' does not provide an export named 'shouldUsePluelyAPI' @ http://localhost:1420/@vite/client:808
+[ 1278909ms] [ERROR] [vite] Failed to reload /src/components/Sidebar.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 1278909ms] [ERROR] [vite] SyntaxError: The requested module '/src/lib/functions/pluely.api.ts?t=1771719415704' does not provide an export named 'shouldUsePluelyAPI' @ http://localhost:1420/@vite/client:808
+[ 1278909ms] [ERROR] [vite] Failed to reload /src/contexts/app.context.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 1278909ms] [ERROR] [vite] SyntaxError: The requested module '/src/lib/functions/pluely.api.ts?t=1771719415704' does not provide an export named 'shouldUsePluelyAPI' @ http://localhost:1420/@vite/client:808
+[ 1278909ms] [ERROR] [vite] Failed to reload /src/pages/chats/components/View.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 1278910ms] [ERROR] [vite] SyntaxError: The requested module '/src/lib/functions/pluely.api.ts?t=1771719415704' does not provide an export named 'shouldUsePluelyAPI' @ http://localhost:1420/@vite/client:808
+[ 1278910ms] [ERROR] [vite] Failed to reload /src/pages/system-prompts/index.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 1278911ms] [ERROR] [vite] SyntaxError: The requested module '/src/lib/functions/pluely.api.ts?t=1771719415704' does not provide an export named 'shouldUsePluelyAPI' @ http://localhost:1420/@vite/client:808
+[ 1278911ms] [ERROR] [vite] Failed to reload /src/pages/app/components/completion/index.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 1278914ms] [ERROR] [vite] SyntaxError: The requested module '/src/lib/functions/pluely.api.ts?t=1771719415704' does not provide an export named 'shouldUsePluelyAPI' @ http://localhost:1420/@vite/client:808
+[ 1278914ms] [ERROR] [vite] Failed to reload /src/pages/app/index.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 1278917ms] [ERROR] [vite] SyntaxError: The requested module '/src/lib/functions/pluely.api.ts?t=1771719415704' does not provide an export named 'shouldUsePluelyAPI' @ http://localhost:1420/@vite/client:808
+[ 1278917ms] [ERROR] [vite] Failed to reload /src/pages/dev/index.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 1279205ms] The requested module '/src/lib/functions/pluely.api.ts?t=1771719415704' does not provide an export named 'shouldUsePluelyAPI'
+[ 3252690ms] TypeError: Cannot read properties of undefined (reading 'metadata')
+    at getCurrentWindow (http://localhost:1420/node_modules/.vite/deps/chunk-25T2DHJD.js?v=6d86075a:327:48)
+    at http://localhost:1420/src/main.tsx:9:23

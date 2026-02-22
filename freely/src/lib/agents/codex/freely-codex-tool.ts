@@ -114,9 +114,11 @@ export class FreelyCodexTool {
     taskId?: TaskID,
     permissionMode?: PermissionMode,
     streamingCallbacks?: StreamingCallbacks,
-    _abortController?: AbortController
+    _abortController?: AbortController,
+    /** Optional API key override — falls back to localStorage provider variable */
+    apiKeyOverride?: string
   ): Promise<FreelyExecutionResult> {
-    const apiKey = this.apiKey;
+    const apiKey = apiKeyOverride ?? this.apiKey;
     if (!apiKey) {
       return {
         userMessageId: toMessageID(generateId()),

@@ -12,9 +12,77 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::process::Stdio;
+use std::sync::{Arc, Mutex};
 use tauri::{AppHandle, Emitter};
 use tokio::io::{AsyncBufReadExt, BufReader};
 use tokio::process::Command;
+use tracing::warn;
+
+// ============================================================================
+// Process registry — tracks live agent child PIDs by session ID
+// ============================================================================
+
+/// Shared state: session_id → child process PID.
+/// Allows the frontend to cancel in-flight agent runs via `kill_agent_process`.
+#[derive(Default, Clone)]
+pub struct AgentProcessRegistry(pub Arc<Mutex<HashMap<String, u32>>>);
+
+/// Kill an in-flight agent process for the given session.
+/// If no process is registered (already finished or never started), this is a no-op.
+///
+/// # Security note
+/// `registry.remove()` returns `None` when the session_id is unknown, causing an
+/// early return with no kill. This is safe: the registry only ever holds PIDs that
+/// *we* inserted when spawning a child process, so there is no risk of killing an
+/// arbitrary PID supplied by the frontend.
+///
+/// # Race condition (v1 known limitation)
+/// If `kill_agent_process` fires before `run_cli_process` has had a chance to
+/// register the PID (i.e. between spawn and the `map.insert` call), the remove
+/// returns `None` and the kill is a no-op. The process will continue to run until
+/// it finishes naturally. This window is extremely small and acceptable for v1.
+#[tauri::command]
+pub async fn kill_agent_process(
+    registry: tauri::State<'_, AgentProcessRegistry>,
+    session_id: String,
+) -> Result<(), String> {
+    let pid = registry
+        .0
+        .lock()
+        .map_err(|e| format!("Registry lock poisoned: {e}"))?
+        .remove(&session_id);
+
+    if let Some(pid) = pid {
+        kill_pid(pid).await;
+    }
+    Ok(())
+}
+
+/// Send SIGTERM (Unix) or taskkill (Windows) to the given PID.
+///
+/// Uses `tokio::task::spawn_blocking` to avoid blocking the async executor with
+/// a synchronous `std::process::Command::status()` call.
+#[cfg(unix)]
+async fn kill_pid(pid: u32) {
+    // SIGTERM for graceful shutdown; the process group is not targeted since
+    // CLI tools like `claude` may manage their own child processes.
+    let _ = tokio::task::spawn_blocking(move || {
+        let _ = std::process::Command::new("kill")
+            .args(["-TERM", &pid.to_string()])
+            .status();
+    })
+    .await;
+}
+
+#[cfg(windows)]
+async fn kill_pid(pid: u32) {
+    let _ = tokio::task::spawn_blocking(move || {
+        let _ = std::process::Command::new("taskkill")
+            .args(["/F", "/PID", &pid.to_string()])
+            .status();
+    })
+    .await;
+}
 
 // ============================================================================
 // Shared types
@@ -301,13 +369,16 @@ pub async fn load_env_file() -> Result<HashMap<String, String>, String> {
                 // Parse KEY=VALUE (with optional quotes)
                 if let Some((key, value)) = trimmed.split_once('=') {
                     let key = key.trim().to_string();
-                    let mut value = value.trim().to_string();
-                    // Strip surrounding quotes
-                    if (value.starts_with('"') && value.ends_with('"'))
-                        || (value.starts_with('\'') && value.ends_with('\''))
-                    {
-                        value = value[1..value.len() - 1].to_string();
-                    }
+                    let raw = value.trim();
+                    // Strip surrounding quotes safely (handles edge cases like KEY=")
+                    let value = raw
+                        .strip_prefix('"')
+                        .and_then(|v| v.strip_suffix('"'))
+                        .or_else(|| {
+                            raw.strip_prefix('\'').and_then(|v| v.strip_suffix('\''))
+                        })
+                        .unwrap_or(raw)
+                        .to_string();
                     vars.insert(key, value);
                 }
             }
@@ -326,6 +397,7 @@ pub async fn load_env_file() -> Result<HashMap<String, String>, String> {
 pub async fn run_claude(
     app: AppHandle,
     payload: AgentPayload,
+    registry: tauri::State<'_, AgentProcessRegistry>,
 ) -> Result<Vec<StreamEvent>, String> {
     let binary = resolve_binary("claude").await?;
 
@@ -360,7 +432,7 @@ pub async fn run_claude(
         .stderr(Stdio::piped())
         .stdin(Stdio::null());
 
-    run_cli_process(app, cmd, &payload.session_id).await
+    run_cli_process(app, cmd, &payload.session_id, &registry).await
 }
 
 // ============================================================================
@@ -371,6 +443,7 @@ pub async fn run_claude(
 pub async fn run_codex(
     app: AppHandle,
     payload: AgentPayload,
+    registry: tauri::State<'_, AgentProcessRegistry>,
 ) -> Result<Vec<StreamEvent>, String> {
     let binary = resolve_binary("codex").await?;
 
@@ -391,7 +464,7 @@ pub async fn run_codex(
         .stderr(Stdio::piped())
         .stdin(Stdio::null());
 
-    run_cli_process(app, cmd, &payload.session_id).await
+    run_cli_process(app, cmd, &payload.session_id, &registry).await
 }
 
 // ============================================================================
@@ -402,6 +475,7 @@ pub async fn run_codex(
 pub async fn run_gemini(
     app: AppHandle,
     payload: AgentPayload,
+    registry: tauri::State<'_, AgentProcessRegistry>,
 ) -> Result<Vec<StreamEvent>, String> {
     let binary = resolve_binary("gemini").await?;
 
@@ -418,7 +492,7 @@ pub async fn run_gemini(
         .stderr(Stdio::piped())
         .stdin(Stdio::null());
 
-    run_cli_process(app, cmd, &payload.session_id).await
+    run_cli_process(app, cmd, &payload.session_id, &registry).await
 }
 
 // ============================================================================
@@ -452,8 +526,21 @@ async fn run_cli_process(
     app: AppHandle,
     mut cmd: Command,
     session_id: &str,
+    registry: &AgentProcessRegistry,
 ) -> Result<Vec<StreamEvent>, String> {
     let mut child = cmd.spawn().map_err(|e| format!("Failed to spawn process: {}", e))?;
+
+    // Register PID so the frontend can cancel via kill_agent_process
+    if let Some(pid) = child.id() {
+        if let Ok(mut map) = registry.0.lock() {
+            if let Some(old_pid) = map.insert(session_id.to_string(), pid) {
+                warn!(
+                    "Session {} already had PID {} registered; replaced with PID {}",
+                    session_id, old_pid, pid
+                );
+            }
+        }
+    }
 
     let stdout = child
         .stdout
@@ -495,7 +582,9 @@ async fn run_cli_process(
         if let Ok(json) = serde_json::from_str::<serde_json::Value>(trimmed) {
             // Handle structured JSON events from CLIs that support them
             let event = parse_json_event(&json);
-            let _ = app.emit(&event_name, &event);
+            if let Err(e) = app.emit(&event_name, &event) {
+                warn!("Failed to emit agent stream event: {}", e);
+            }
             events.push(event);
         } else {
             // Plain text output — treat as a partial text chunk
@@ -509,16 +598,26 @@ async fn run_cli_process(
             };
 
             // Emit real-time event to frontend
-            let _ = app.emit(&event_name, &event);
+            if let Err(e) = app.emit(&event_name, &event) {
+                warn!("Failed to emit agent stream event: {}", e);
+            }
             events.push(event);
         }
     }
 
     // Wait for process to exit
-    let status = child
+    let wait_result = child
         .wait()
         .await
-        .map_err(|e| format!("Failed to wait for process: {}", e))?;
+        .map_err(|e| format!("Failed to wait for process: {}", e));
+
+    // Deregister PID before propagating any error — avoids a registry leak if
+    // `wait()` returns an OS error (e.g. ECHILD). The process is gone either way.
+    if let Ok(mut map) = registry.0.lock() {
+        map.remove(session_id);
+    }
+
+    let status = wait_result?;
 
     // Collect stderr
     let stderr_output = stderr_handle
@@ -540,7 +639,9 @@ async fn run_cli_process(
             token_usage: None,
             error: Some(error_msg.clone()),
         };
-        let _ = app.emit(&event_name, &error_event);
+        if let Err(e) = app.emit(&event_name, &error_event) {
+            warn!("Failed to emit agent error event: {}", e);
+        }
         events.push(error_event);
 
         // If we got NO partial events, return the error
@@ -558,7 +659,9 @@ async fn run_cli_process(
         token_usage: None,
         error: None,
     };
-    let _ = app.emit(&event_name, &complete_event);
+    if let Err(e) = app.emit(&event_name, &complete_event) {
+        warn!("Failed to emit agent complete event: {}", e);
+    }
     events.push(complete_event);
 
     Ok(events)

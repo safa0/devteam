@@ -145,8 +145,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     safeLocalStorage.setItem(STORAGE_KEYS.SUPPORTS_IMAGES, String(value));
   };
 
-  // Pluely API State - always disabled (Freely API removed)
-  const [pluelyApiEnabled, setPluelyApiEnabledState] = useState<boolean>(false);
+  // Freely API State - always disabled (API removed)
+  const [freelyApiEnabled, setFreelyApiEnabledState] = useState<boolean>(false);
 
   const getActiveLicenseStatus = async () => {
     // License validation removed - always treated as active
@@ -649,9 +649,9 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     loadData();
   };
 
-  const setPluelyApiEnabled = async (_enabled: boolean) => {
+  const setFreelyApiEnabled = async (_enabled: boolean) => {
     // Freely API removed - always disabled
-    setPluelyApiEnabledState(false);
+    setFreelyApiEnabledState(false);
   };
 
   // Create the context value (extend IContextType accordingly)
@@ -674,8 +674,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     toggleAlwaysOnTop,
     toggleAutostart,
     loadData,
-    pluelyApiEnabled,
-    setPluelyApiEnabled,
+    freelyApiEnabled,
+    setFreelyApiEnabled,
     hasActiveLicense,
     setHasActiveLicense,
     getActiveLicenseStatus,

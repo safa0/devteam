@@ -1,0 +1,155 @@
+[    3936ms] TypeError: Cannot read properties of undefined (reading 'metadata')
+    at getCurrentWindow (http://localhost:1420/node_modules/.vite/deps/chunk-25T2DHJD.js?v=6d86075a:327:48)
+    at http://localhost:1420/src/main.tsx:9:23
+[    2716ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:1420/favicon.ico:0
+[   37243ms] TypeError: Cannot read properties of undefined (reading 'metadata')
+    at getCurrentWindow (http://localhost:1420/node_modules/.vite/deps/chunk-25T2DHJD.js?v=6d86075a:327:48)
+    at http://localhost:1420/src/main.tsx:9:23
+[ 1185655ms] TypeError: Cannot read properties of undefined (reading 'metadata')
+    at getCurrentWindow (http://localhost:1420/node_modules/.vite/deps/chunk-25T2DHJD.js?v=0eff9208:327:48)
+    at http://localhost:1420/src/main.tsx:9:23
+[ 2118561ms] TypeError: Cannot read properties of undefined (reading 'metadata')
+    at getCurrentWindow (http://localhost:1420/node_modules/.vite/deps/chunk-25T2DHJD.js?v=0eff9208:327:48)
+    at http://localhost:1420/src/main.tsx?t=1771723528050:9:23
+[ 2119126ms] TypeError: Cannot read properties of undefined (reading 'metadata')
+    at getCurrentWindow (http://localhost:1420/node_modules/.vite/deps/chunk-25T2DHJD.js?v=0eff9208:327:48)
+    at http://localhost:1420/src/main.tsx?t=1771723529487:9:23
+[ 2150265ms] TypeError: Cannot read properties of undefined (reading 'metadata')
+    at getCurrentWindow (http://localhost:1420/node_modules/.vite/deps/chunk-25T2DHJD.js?v=0eff9208:327:48)
+    at http://localhost:1420/src/main.tsx?t=1771723560409:9:23
+[ 2158488ms] TypeError: Cannot read properties of undefined (reading 'metadata')
+    at getCurrentWindow (http://localhost:1420/node_modules/.vite/deps/chunk-25T2DHJD.js?v=0eff9208:327:48)
+    at http://localhost:1420/src/main.tsx?t=1771723568721:9:23
+[ 2166062ms] TypeError: Cannot read properties of undefined (reading 'metadata')
+    at getCurrentWindow (http://localhost:1420/node_modules/.vite/deps/chunk-25T2DHJD.js?v=0eff9208:327:48)
+    at http://localhost:1420/src/main.tsx?t=1771723576102:9:23
+[ 2170577ms] TypeError: Cannot read properties of undefined (reading 'metadata')
+    at getCurrentWindow (http://localhost:1420/node_modules/.vite/deps/chunk-25T2DHJD.js?v=0eff9208:327:48)
+    at http://localhost:1420/src/main.tsx?t=1771723580696:9:23
+[ 2178779ms] TypeError: Cannot read properties of undefined (reading 'metadata')
+    at getCurrentWindow (http://localhost:1420/node_modules/.vite/deps/chunk-25T2DHJD.js?v=0eff9208:327:48)
+    at http://localhost:1420/src/main.tsx?t=1771723588669:9:23
+[ 2555186ms] TypeError: Cannot read properties of undefined (reading 'metadata')
+    at getCurrentWindow (http://localhost:1420/node_modules/.vite/deps/chunk-25T2DHJD.js?v=11c6d68b:327:48)
+    at http://localhost:1420/src/main.tsx:9:23
+[ 2804077ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:1420/src/pages/system-prompts/PluelyPrompts.tsx?t=1771724212120:0
+[ 2804077ms] [ERROR] [vite] Failed to reload /src/pages/system-prompts/PluelyPrompts.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2804170ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:1420/src/pages/system-prompts/PluelyPrompts.tsx?t=1771724212123:0
+[ 2804171ms] [ERROR] [vite] Failed to reload /src/pages/system-prompts/PluelyPrompts.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2804224ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:1420/src/pages/system-prompts/PluelyPrompts.tsx?t=1771724212126:0
+[ 2804224ms] [ERROR] [vite] Failed to reload /src/pages/system-prompts/PluelyPrompts.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2804279ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:1420/src/pages/system-prompts/PluelyPrompts.tsx?t=1771724212129:0
+[ 2804279ms] [ERROR] [vite] Failed to reload /src/pages/system-prompts/PluelyPrompts.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2804329ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:1420/src/pages/system-prompts/PluelyPrompts.tsx?t=1771724212132:0
+[ 2804329ms] [ERROR] [vite] Failed to reload /src/pages/system-prompts/PluelyPrompts.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2804368ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:1420/src/pages/system-prompts/PluelyPrompts.tsx?t=1771724212135:0
+[ 2804368ms] [ERROR] [vite] Failed to reload /src/pages/system-prompts/PluelyPrompts.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2804419ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:1420/src/pages/system-prompts/PluelyPrompts.tsx?t=1771724212138:0
+[ 2804420ms] [ERROR] [vite] Failed to reload /src/pages/system-prompts/PluelyPrompts.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2804465ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:1420/src/pages/system-prompts/PluelyPrompts.tsx?t=1771724212141:0
+[ 2804465ms] [ERROR] [vite] Failed to reload /src/pages/system-prompts/PluelyPrompts.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2804497ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:1420/src/pages/system-prompts/PluelyPrompts.tsx?t=1771724212144:0
+[ 2804499ms] [ERROR] [vite] Failed to reload /src/pages/system-prompts/PluelyPrompts.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2804535ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:1420/src/pages/system-prompts/PluelyPrompts.tsx?t=1771724212148:0
+[ 2804535ms] [ERROR] [vite] Failed to reload /src/pages/system-prompts/PluelyPrompts.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2804853ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:1420/src/pages/system-prompts/PluelyPrompts.tsx?t=1771724212151:0
+[ 2804854ms] [ERROR] [vite] Failed to reload /src/pages/system-prompts/PluelyPrompts.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2805094ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:1420/src/pages/system-prompts/PluelyPrompts.tsx?t=1771724212192:0
+[ 2805095ms] [ERROR] [vite] Failed to reload /src/pages/system-prompts/PluelyPrompts.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2805123ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:1420/src/pages/dashboard/components/PluelyApiSetup.tsx?t=1771724212193:0
+[ 2805124ms] [ERROR] [vite] Failed to reload /src/pages/dashboard/components/PluelyApiSetup.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2805130ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:1420/src/pages/system-prompts/PluelyPrompts.tsx?t=1771724212194:0
+[ 2805131ms] [ERROR] [vite] Failed to reload /src/pages/system-prompts/PluelyPrompts.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2807072ms] TypeError: Cannot read properties of undefined (reading 'metadata')
+    at getCurrentWindow (http://localhost:1420/node_modules/.vite/deps/chunk-25T2DHJD.js?v=11c6d68b:327:48)
+    at http://localhost:1420/src/main.tsx?t=1771724212192:9:23
+[ 2842167ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:1420/src/lib/agents/orchestrator.ts?t=1771724252375:0
+[ 2842168ms] [ERROR] [vite] Failed to reload /src/components/DragButton.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842186ms] [ERROR] [vite] Failed to reload /src/components/Sidebar.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842193ms] [ERROR] [vite] Failed to reload /src/contexts/app.context.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842208ms] [ERROR] [vite] Failed to reload /src/pages/dev/index.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842218ms] [ERROR] [vite] Failed to reload /src/pages/app/index.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842222ms] [ERROR] [vite] Failed to reload /src/pages/screenshot/index.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842225ms] [ERROR] [vite] Failed to reload /src/pages/chats/index.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842228ms] [ERROR] [vite] Failed to reload /src/pages/chats/components/View.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842229ms] [ERROR] [vite] Failed to reload /src/components/DragButton.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842231ms] [ERROR] [vite] Failed to reload /src/components/Sidebar.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842231ms] [ERROR] [vite] Failed to reload /src/components/updater/index.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842233ms] [ERROR] [vite] Failed to reload /src/components/Markdown/copy-button.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842234ms] [ERROR] [vite] Failed to reload /src/pages/dev/components/stt-configs/CustomProvider.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842236ms] [ERROR] [vite] Failed to reload /src/pages/dev/components/ai-configs/CustomProvider.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842239ms] [ERROR] [vite] Failed to reload /src/pages/dev/components/stt-configs/CreateEditProvider.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842241ms] [ERROR] [vite] Failed to reload /src/pages/app/components/completion/index.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842244ms] [ERROR] [vite] Failed to reload /src/pages/dev/components/ai-configs/CreateEditProvider.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842405ms] [ERROR] [vite] Failed to reload /src/pages/system-prompts/index.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842422ms] [ERROR] [vite] Failed to reload /src/pages/app/index.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842426ms] [ERROR] [vite] Failed to reload /src/pages/dev/index.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842426ms] [ERROR] [vite] Failed to reload /src/pages/chats/components/View.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842429ms] [ERROR] [vite] Failed to reload /src/pages/screenshot/index.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842430ms] [ERROR] [vite] Failed to reload /src/pages/chats/index.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842486ms] [ERROR] [vite] Failed to reload /src/components/DragButton.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842487ms] [ERROR] [vite] Failed to reload /src/components/Sidebar.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842487ms] [ERROR] [vite] Failed to reload /src/components/updater/index.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842490ms] [ERROR] [vite] Failed to reload /src/pages/system-prompts/index.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842529ms] [ERROR] [vite] Failed to reload /src/pages/app/components/completion/index.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842531ms] [ERROR] [vite] Failed to reload /src/pages/dev/components/stt-configs/CustomProvider.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842533ms] [ERROR] [vite] Failed to reload /src/pages/dev/components/ai-configs/CustomProvider.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842536ms] [ERROR] [vite] Failed to reload /src/pages/dev/components/stt-configs/CreateEditProvider.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842553ms] [ERROR] [vite] Failed to reload /src/components/Markdown/copy-button.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842556ms] [ERROR] [vite] Failed to reload /src/pages/dev/components/ai-configs/CreateEditProvider.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842612ms] [ERROR] [vite] Failed to reload /src/pages/dev/index.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842613ms] [ERROR] [vite] Failed to reload /src/pages/app/index.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842615ms] [ERROR] [vite] Failed to reload /src/pages/chats/index.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842618ms] [ERROR] [vite] Failed to reload /src/pages/chats/components/View.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842619ms] [ERROR] [vite] Failed to reload /src/components/DragButton.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842619ms] [ERROR] [vite] Failed to reload /src/pages/system-prompts/index.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842625ms] [ERROR] [vite] Failed to reload /src/components/Sidebar.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842629ms] [ERROR] [vite] Failed to reload /src/components/updater/index.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842630ms] [ERROR] [vite] Failed to reload /src/components/Markdown/copy-button.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842631ms] [ERROR] [vite] Failed to reload /src/pages/app/components/completion/index.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842644ms] [ERROR] [vite] Failed to reload /src/pages/screenshot/index.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842647ms] [ERROR] [vite] Failed to reload /src/pages/dev/components/stt-configs/CustomProvider.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842649ms] [ERROR] [vite] Failed to reload /src/pages/dev/components/ai-configs/CustomProvider.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842650ms] [ERROR] [vite] Failed to reload /src/pages/dev/components/stt-configs/CreateEditProvider.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842652ms] [ERROR] [vite] Failed to reload /src/pages/dev/components/ai-configs/CreateEditProvider.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842703ms] [ERROR] [vite] Failed to reload /src/pages/dev/index.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842707ms] [ERROR] [vite] Failed to reload /src/pages/screenshot/index.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842710ms] [ERROR] [vite] Failed to reload /src/pages/chats/index.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842716ms] [ERROR] [vite] Failed to reload /src/pages/chats/components/View.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842721ms] [ERROR] [vite] Failed to reload /src/components/DragButton.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842722ms] [ERROR] [vite] Failed to reload /src/components/Sidebar.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842723ms] [ERROR] [vite] Failed to reload /src/components/updater/index.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842723ms] [ERROR] [vite] Failed to reload /src/pages/system-prompts/index.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842725ms] [ERROR] [vite] Failed to reload /src/pages/app/index.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842726ms] [ERROR] [vite] Failed to reload /src/components/Markdown/copy-button.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842727ms] [ERROR] [vite] Failed to reload /src/pages/app/components/completion/index.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842728ms] [ERROR] [vite] Failed to reload /src/pages/dev/components/stt-configs/CustomProvider.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842730ms] [ERROR] [vite] Failed to reload /src/pages/dev/components/ai-configs/CustomProvider.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842739ms] [ERROR] [vite] Failed to reload /src/pages/dev/components/ai-configs/CreateEditProvider.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842742ms] [ERROR] [vite] Failed to reload /src/pages/dev/components/stt-configs/CreateEditProvider.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2842752ms] [ERROR] [vite] Failed to reload /src/layouts/ErrorLayout.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2843073ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:1420/src/lib/agents/orchestrator.ts?t=1771724252375:0
+[ 2848038ms] TypeError: Cannot read properties of undefined (reading 'metadata')
+    at getCurrentWindow (http://localhost:1420/node_modules/.vite/deps/chunk-25T2DHJD.js?v=11c6d68b:327:48)
+    at http://localhost:1420/src/main.tsx?t=1771724257489:9:23
+[ 2852733ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:1420/src/pages/system-prompts/FreelyPrompts.tsx?t=1771724262242:0
+[ 2852733ms] [ERROR] [vite] Failed to reload /src/pages/system-prompts/FreelyPrompts.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2852902ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:1420/src/pages/dashboard/components/FreelyApiSetup.tsx?t=1771724262247:0
+[ 2852908ms] [ERROR] [vite] Failed to reload /src/pages/dashboard/components/FreelyApiSetup.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2852921ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:1420/src/pages/system-prompts/FreelyPrompts.tsx?t=1771724262248:0
+[ 2852922ms] [ERROR] [vite] Failed to reload /src/pages/system-prompts/FreelyPrompts.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:1420/@vite/client:808
+[ 2855932ms] TypeError: Cannot read properties of undefined (reading 'metadata')
+    at getCurrentWindow (http://localhost:1420/node_modules/.vite/deps/chunk-25T2DHJD.js?v=11c6d68b:327:48)
+    at http://localhost:1420/src/main.tsx?t=1771724262557:9:23
+[26289083ms] TypeError: Cannot read properties of undefined (reading 'metadata')
+    at getCurrentWindow (http://localhost:1420/node_modules/.vite/deps/chunk-25T2DHJD.js?v=6d86075a:327:48)
+    at http://localhost:1420/src/main.tsx:9:23
+[27765479ms] TypeError: Cannot read properties of undefined (reading 'metadata')
+    at getCurrentWindow (http://localhost:1420/node_modules/.vite/deps/chunk-25T2DHJD.js?v=6d86075a:327:48)
+    at http://localhost:1420/src/main.tsx?t=1771749174965:9:23
+[27823380ms] TypeError: Cannot read properties of undefined (reading 'metadata')
+    at getCurrentWindow (http://localhost:1420/node_modules/.vite/deps/chunk-25T2DHJD.js?v=6d86075a:327:48)
+    at http://localhost:1420/src/main.tsx?t=1771749231215:9:23
+[28677343ms] TypeError: Cannot read properties of undefined (reading 'metadata')
+    at getCurrentWindow (http://localhost:1420/node_modules/.vite/deps/chunk-25T2DHJD.js?v=6d86075a:327:48)
+    at http://localhost:1420/src/main.tsx?t=1771750083687:9:23

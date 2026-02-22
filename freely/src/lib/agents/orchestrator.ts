@@ -28,6 +28,29 @@ import {
   toSessionID,
 } from './types.js';
 
+/** Invoke a Tauri command — no-op outside of Tauri context */
+async function tauriInvoke<T>(command: string, args?: Record<string, unknown>): Promise<T | undefined> {
+  if (typeof window === 'undefined' || !('__TAURI__' in window)) return undefined;
+  try {
+    const { invoke } = await import('@tauri-apps/api/core');
+    return invoke<T>(command, args);
+  } catch {
+    return undefined;
+  }
+}
+
+/**
+ * Kill the CLI child process for the given session via the Rust registry.
+ * Safe to call even if the session has already ended (no-op on the Rust side).
+ */
+async function killAgentProcess(sessionId: string): Promise<void> {
+  try {
+    await tauriInvoke('kill_agent_process', { session_id: sessionId });
+  } catch {
+    // Best-effort — don't surface errors to the caller
+  }
+}
+
 export const AGENT_PROVIDER_IDS = ['claude-code', 'codex', 'gemini-sdk'] as const;
 export type AgentProviderId = (typeof AGENT_PROVIDER_IDS)[number];
 
@@ -129,6 +152,9 @@ export class FreelyAgentOrchestrator {
     if (params.signal?.aborted) return;
 
     const sessionId = toSessionID(params.sessionId ?? generateId());
+
+    // Kill the Rust child process when the caller aborts
+    params.signal?.addEventListener('abort', () => killAgentProcess(sessionId), { once: true });
     let done = false;
     let errorThrown: Error | null = null;
 
@@ -181,6 +207,9 @@ export class FreelyAgentOrchestrator {
     }
 
     const sessionId = toSessionID(params.sessionId ?? generateId());
+
+    // Kill the Rust child process when the caller aborts
+    params.signal?.addEventListener('abort', () => killAgentProcess(sessionId), { once: true });
     const prompt = this.buildPromptWithHistory(params);
     const queue: string[] = [];
     const waiters: Array<() => void> = [];
@@ -203,7 +232,7 @@ export class FreelyAgentOrchestrator {
 
     try {
       this.codexTool
-        .executePromptWithStreaming(sessionId, prompt, undefined, undefined, callbacks)
+        .executePromptWithStreaming(sessionId, prompt, undefined, undefined, callbacks, undefined, apiKey)
         .then((result) => {
           if (result.error) finish(new Error(result.error));
           else finish();
@@ -224,7 +253,11 @@ export class FreelyAgentOrchestrator {
     if (params.signal?.aborted) return;
 
     // Gemini can operate with OAuth login even without an API key
+    const apiKey = params.apiKey ?? getProviderVariable('GOOGLE_API_KEY') ?? undefined;
     const sessionId = toSessionID(params.sessionId ?? generateId());
+
+    // Kill the Rust child process when the caller aborts
+    params.signal?.addEventListener('abort', () => killAgentProcess(sessionId), { once: true });
     const prompt = this.buildPromptWithHistory(params);
     const queue: string[] = [];
     const waiters: Array<() => void> = [];
@@ -247,7 +280,7 @@ export class FreelyAgentOrchestrator {
 
     try {
       this.geminiTool
-        .executePromptWithStreaming(sessionId, prompt, undefined, undefined, callbacks)
+        .executePromptWithStreaming(sessionId, prompt, undefined, undefined, callbacks, undefined, apiKey)
         .then((result) => {
           if (result.error) finish(new Error(result.error));
           else finish();
@@ -307,6 +340,9 @@ function buildStreamingCallbacks(
   };
 }
 
+/** Maximum time to wait for the next chunk before assuming the CLI process has crashed. */
+const DRAIN_TIMEOUT_MS = 30_000;
+
 /** Async generator that yields from a push queue until done */
 async function* drainQueue(
   queue: string[],
@@ -331,8 +367,21 @@ async function* drainQueue(
       return;
     }
 
-    // Wait for next chunk or done signal
-    await new Promise<void>((resolve) => waiters.push(resolve));
+    // Wait for next chunk or done signal, with a timeout to prevent hanging
+    // indefinitely if the CLI process crashes without calling finish().
+    const timedOut = await new Promise<boolean>((resolve) => {
+      const timer = setTimeout(() => resolve(true), DRAIN_TIMEOUT_MS);
+      waiters.push(() => {
+        clearTimeout(timer);
+        resolve(false);
+      });
+    });
+
+    if (timedOut) {
+      throw new Error(
+        `Agent stream timed out after ${DRAIN_TIMEOUT_MS / 1000}s — CLI process may have crashed.`
+      );
+    }
   }
 }
 

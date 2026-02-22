@@ -41,6 +41,7 @@ pub fn run() {
         )
         .manage(AudioState::default())
         .manage(CaptureState::default())
+        .manage(agents::AgentProcessRegistry::default())
         .manage(shortcuts::WindowVisibility {
             is_hidden: Mutex::new(false),
         })
@@ -90,8 +91,6 @@ pub fn run() {
             api::transcribe_audio,
             api::chat_stream_response,
             api::fetch_models,
-            api::fetch_prompts,
-            api::create_system_prompt,
             api::check_license_status,
             speaker::start_system_audio_capture,
             speaker::stop_system_audio_capture,
@@ -111,8 +110,13 @@ pub fn run() {
             agents::run_claude,
             agents::run_codex,
             agents::run_gemini,
+            agents::kill_agent_process,
         ])
         .setup(|app| {
+            // Migrate pluely.db → freely.db for existing users before the SQL plugin
+            // opens the database for the first time.
+            migrate_pluely_db(app.handle());
+
             // Setup main window positioning
             window::setup_main_window(app).expect("Failed to setup main window");
             #[cfg(target_os = "macos")]
@@ -204,6 +208,56 @@ pub fn run() {
     builder
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
+}
+
+/// One-time migration: rename `pluely.db` to `freely.db` so existing users
+/// retain their conversation history after the rename.
+///
+/// The tauri-plugin-sql stores SQLite files in `app_local_data_dir()`.
+/// We rename before the plugin opens the file (which happens lazily on first JS access).
+/// If `freely.db` already exists we leave both files untouched to avoid overwriting data.
+fn migrate_pluely_db(app: &AppHandle) {
+    let data_dir = match app.path().app_local_data_dir() {
+        Ok(dir) => dir,
+        Err(e) => {
+            eprintln!("[migrate_pluely_db] Could not resolve app_local_data_dir: {}", e);
+            return;
+        }
+    };
+
+    let old_path = data_dir.join("pluely.db");
+    let new_path = data_dir.join("freely.db");
+
+    if old_path.exists() && !new_path.exists() {
+        match std::fs::rename(&old_path, &new_path) {
+            Ok(()) => println!(
+                "[migrate_pluely_db] Renamed {:?} → {:?}",
+                old_path, new_path
+            ),
+            Err(e) => eprintln!(
+                "[migrate_pluely_db] Failed to rename {:?} → {:?}: {}",
+                old_path, new_path, e
+            ),
+        }
+
+        // Also rename SQLite WAL sidecar files if they exist.
+        for suffix in &["-wal", "-shm"] {
+            let old_sidecar = data_dir.join(format!("pluely.db{}", suffix));
+            let new_sidecar = data_dir.join(format!("freely.db{}", suffix));
+            if old_sidecar.exists() {
+                match std::fs::rename(&old_sidecar, &new_sidecar) {
+                    Ok(()) => println!(
+                        "[migrate_pluely_db] Renamed {:?} → {:?}",
+                        old_sidecar, new_sidecar
+                    ),
+                    Err(e) => eprintln!(
+                        "[migrate_pluely_db] Failed to rename {:?} → {:?}: {}",
+                        old_sidecar, new_sidecar, e
+                    ),
+                }
+            }
+        }
+    }
 }
 
 #[cfg(target_os = "macos")]
