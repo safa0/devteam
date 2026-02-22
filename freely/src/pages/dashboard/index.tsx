@@ -5,7 +5,7 @@ const Dashboard = () => {
   return (
     <PageLayout
       title="Dashboard"
-      description="Configure your Freely API settings and manage your license."
+      description="Configure your AI providers and settings."
     >
       {/* Freely API Setup */}
       <PluelyApiSetup />
