@@ -115,9 +115,11 @@ export class FreelyGeminiTool {
     taskId?: TaskID,
     permissionMode?: PermissionMode,
     streamingCallbacks?: StreamingCallbacks,
-    _abortController?: AbortController
+    _abortController?: AbortController,
+    /** Optional API key override — falls back to localStorage provider variable */
+    apiKeyOverride?: string
   ): Promise<FreelyExecutionResult> {
-    const apiKey = this.apiKey; // null = use OAuth (gemini login)
+    const apiKey = apiKeyOverride ?? this.apiKey; // null = use OAuth (gemini login)
 
     const userMessageId = toMessageID(generateId());
 

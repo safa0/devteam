@@ -203,7 +203,7 @@ export class FreelyAgentOrchestrator {
 
     try {
       this.codexTool
-        .executePromptWithStreaming(sessionId, prompt, undefined, undefined, callbacks)
+        .executePromptWithStreaming(sessionId, prompt, undefined, undefined, callbacks, undefined, apiKey)
         .then((result) => {
           if (result.error) finish(new Error(result.error));
           else finish();
@@ -224,6 +224,7 @@ export class FreelyAgentOrchestrator {
     if (params.signal?.aborted) return;
 
     // Gemini can operate with OAuth login even without an API key
+    const apiKey = params.apiKey ?? getProviderVariable('GOOGLE_API_KEY') ?? undefined;
     const sessionId = toSessionID(params.sessionId ?? generateId());
     const prompt = this.buildPromptWithHistory(params);
     const queue: string[] = [];
@@ -247,7 +248,7 @@ export class FreelyAgentOrchestrator {
 
     try {
       this.geminiTool
-        .executePromptWithStreaming(sessionId, prompt, undefined, undefined, callbacks)
+        .executePromptWithStreaming(sessionId, prompt, undefined, undefined, callbacks, undefined, apiKey)
         .then((result) => {
           if (result.error) finish(new Error(result.error));
           else finish();
