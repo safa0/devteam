@@ -218,8 +218,24 @@ describe('FreelyClaudeTool.executePromptWithStreaming — Tauri context', () => 
     mockTauriEvents = [];
     mockInvokeError = null;
     eventListeners.clear();
-    // Set __TAURI__ sentinel so tauriInvoke detects Tauri context
-    (window as any).__TAURI__ = true;
+    // The claude tool checks __TAURI_INTERNALS__ for isTauriContext() and uses
+    // __TAURI_INTERNALS__.invoke directly (not @tauri-apps/api/core).
+    // We wire invoke to fire mockTauriEvents through the event listener.
+    (window as any).__TAURI_INTERNALS__ = {
+      invoke: vi.fn(async (_cmd: string, args?: any) => {
+        if (mockInvokeError) throw mockInvokeError;
+        const sessionId = args?.payload?.sessionId;
+        const eventName = `agent:stream:${sessionId}`;
+        const handler = eventListeners.get(eventName);
+        if (handler) {
+          for (const event of mockTauriEvents) {
+            handler(event);
+          }
+        }
+        return undefined;
+      }),
+      transformCallback: () => 0,
+    };
   });
 
   afterEach(() => {
