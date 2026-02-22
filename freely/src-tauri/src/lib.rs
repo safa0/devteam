@@ -99,10 +99,7 @@ pub fn run() {
             api::transcribe_audio,
             api::chat_stream_response,
             api::fetch_models,
-            api::fetch_prompts,
-            api::create_system_prompt,
             api::check_license_status,
-            api::get_activity,
             speaker::start_system_audio_capture,
             speaker::stop_system_audio_capture,
             speaker::manual_stop_continuous,
@@ -240,7 +237,7 @@ fn migrate_pluely_db(app: &AppHandle) {
 
     if old_path.exists() && !new_path.exists() {
         match std::fs::rename(&old_path, &new_path) {
-            Ok(()) => eprintln!(
+            Ok(()) => println!(
                 "[migrate_pluely_db] Renamed {:?} → {:?}",
                 old_path, new_path
             ),
@@ -248,6 +245,24 @@ fn migrate_pluely_db(app: &AppHandle) {
                 "[migrate_pluely_db] Failed to rename {:?} → {:?}: {}",
                 old_path, new_path, e
             ),
+        }
+
+        // Also rename SQLite WAL sidecar files if they exist.
+        for suffix in &["-wal", "-shm"] {
+            let old_sidecar = data_dir.join(format!("pluely.db{}", suffix));
+            let new_sidecar = data_dir.join(format!("freely.db{}", suffix));
+            if old_sidecar.exists() {
+                match std::fs::rename(&old_sidecar, &new_sidecar) {
+                    Ok(()) => println!(
+                        "[migrate_pluely_db] Renamed {:?} → {:?}",
+                        old_sidecar, new_sidecar
+                    ),
+                    Err(e) => eprintln!(
+                        "[migrate_pluely_db] Failed to rename {:?} → {:?}: {}",
+                        old_sidecar, new_sidecar, e
+                    ),
+                }
+            }
         }
     }
 }
