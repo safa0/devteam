@@ -233,6 +233,8 @@ pub async fn load_env_file() -> Result<HashMap<String, String>, String> {
 
     // 1. CWD/.env (developer convenience)
     candidates.push(std::path::PathBuf::from(".env"));
+    // Also check parent dir (Tauri CWD is src-tauri/, .env lives in project root)
+    candidates.push(std::path::PathBuf::from("../.env"));
 
     // 2. Platform config dir
     if let Some(home) = std::env::var("HOME").ok().or_else(|| std::env::var("USERPROFILE").ok()) {
