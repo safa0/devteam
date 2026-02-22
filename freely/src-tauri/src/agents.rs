@@ -15,6 +15,7 @@ use std::process::Stdio;
 use tauri::{AppHandle, Emitter};
 use tokio::io::{AsyncBufReadExt, BufReader};
 use tokio::process::Command;
+use tracing::warn;
 
 // ============================================================================
 // Shared types
@@ -301,13 +302,16 @@ pub async fn load_env_file() -> Result<HashMap<String, String>, String> {
                 // Parse KEY=VALUE (with optional quotes)
                 if let Some((key, value)) = trimmed.split_once('=') {
                     let key = key.trim().to_string();
-                    let mut value = value.trim().to_string();
-                    // Strip surrounding quotes
-                    if (value.starts_with('"') && value.ends_with('"'))
-                        || (value.starts_with('\'') && value.ends_with('\''))
-                    {
-                        value = value[1..value.len() - 1].to_string();
-                    }
+                    let raw = value.trim();
+                    // Strip surrounding quotes safely (handles edge cases like KEY=")
+                    let value = raw
+                        .strip_prefix('"')
+                        .and_then(|v| v.strip_suffix('"'))
+                        .or_else(|| {
+                            raw.strip_prefix('\'').and_then(|v| v.strip_suffix('\''))
+                        })
+                        .unwrap_or(raw)
+                        .to_string();
                     vars.insert(key, value);
                 }
             }
@@ -495,7 +499,9 @@ async fn run_cli_process(
         if let Ok(json) = serde_json::from_str::<serde_json::Value>(trimmed) {
             // Handle structured JSON events from CLIs that support them
             let event = parse_json_event(&json);
-            let _ = app.emit(&event_name, &event);
+            if let Err(e) = app.emit(&event_name, &event) {
+                warn!("Failed to emit agent stream event: {}", e);
+            }
             events.push(event);
         } else {
             // Plain text output — treat as a partial text chunk
@@ -509,7 +515,9 @@ async fn run_cli_process(
             };
 
             // Emit real-time event to frontend
-            let _ = app.emit(&event_name, &event);
+            if let Err(e) = app.emit(&event_name, &event) {
+                warn!("Failed to emit agent stream event: {}", e);
+            }
             events.push(event);
         }
     }
@@ -540,7 +548,9 @@ async fn run_cli_process(
             token_usage: None,
             error: Some(error_msg.clone()),
         };
-        let _ = app.emit(&event_name, &error_event);
+        if let Err(e) = app.emit(&event_name, &error_event) {
+            warn!("Failed to emit agent error event: {}", e);
+        }
         events.push(error_event);
 
         // If we got NO partial events, return the error
@@ -558,7 +568,9 @@ async fn run_cli_process(
         token_usage: None,
         error: None,
     };
-    let _ = app.emit(&event_name, &complete_event);
+    if let Err(e) = app.emit(&event_name, &complete_event) {
+        warn!("Failed to emit agent complete event: {}", e);
+    }
     events.push(complete_event);
 
     Ok(events)
