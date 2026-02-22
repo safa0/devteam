@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Button, Card, GetLicense, Switch } from "@/components";
+import { Button, Card, Switch } from "@/components";
 import { RotateCcw, AlertCircle, Keyboard, Lock } from "lucide-react";
 import {
   getAllShortcutActions,
@@ -174,28 +174,6 @@ export const ShortcutManager = () => {
             </div>
           </div>
         </div>
-      )}
-
-      {/* License Prompt for Non-Licensed Users */}
-      {!hasActiveLicense && (
-        <Card className="p-4 bg-primary/5 border-primary/20">
-          <div className="flex items-start gap-3">
-            <Lock className="size-4 lg:size-5 text-primary mt-0.5" />
-            <div className="flex-1 space-y-2">
-              <p className="text-xs lg:text-sm font-medium">
-                Unlock Shortcut Customization
-              </p>
-              <p className="text-[10px] lg:text-xs text-muted-foreground">
-                You can enable/disable shortcuts, but need a active license to
-                customize the key bindings.
-              </p>
-              <GetLicense
-                buttonText="Get License"
-                buttonClassName="w-full mt-2"
-              />
-            </div>
-          </div>
-        </Card>
       )}
 
       {/* Flat Shortcuts List */}
