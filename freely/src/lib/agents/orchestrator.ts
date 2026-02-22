@@ -30,11 +30,20 @@ import {
 
 /** Invoke a Tauri command — no-op outside of Tauri context */
 async function tauriInvoke<T>(command: string, args?: Record<string, unknown>): Promise<T | undefined> {
-  if (typeof window === 'undefined' || !('__TAURI__' in window)) return undefined;
+  if (typeof window === 'undefined') return undefined;
+  // Prefer the stable Tauri v2 sentinel, fall back to internals for test compat
+  if (!('__TAURI__' in window) && !('__TAURI_INTERNALS__' in window)) return undefined;
   try {
     const { invoke } = await import('@tauri-apps/api/core');
     return invoke<T>(command, args);
   } catch {
+    // Fallback to __TAURI_INTERNALS__ (e.g. in test environment)
+    if ('__TAURI_INTERNALS__' in window) {
+      const internals = (window as any).__TAURI_INTERNALS__ as {
+        invoke: (cmd: string, args?: Record<string, unknown>) => Promise<T>;
+      };
+      return internals.invoke(command, args);
+    }
     return undefined;
   }
 }

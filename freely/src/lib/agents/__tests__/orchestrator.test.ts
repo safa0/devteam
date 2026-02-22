@@ -131,8 +131,9 @@ describe('FreelyAgentOrchestrator.execute', () => {
 
   describe('codex', () => {
     it('throws OPENAI_API_KEY error when no key is set', async () => {
-      const gen = orchestrator.execute({ toolType: 'codex', userMessage: 'Hello!' });
-      await expect(gen.next()).rejects.toThrow('OPENAI_API_KEY is required');
+      await expect(
+        collectAll(orchestrator.execute({ toolType: 'codex', userMessage: 'Hello!' }))
+      ).rejects.toThrow('OPENAI_API_KEY is required');
     });
 
     it('yields nothing for codex with API key in non-Tauri context', async () => {
@@ -145,18 +146,17 @@ describe('FreelyAgentOrchestrator.execute', () => {
 
     it('passes the orchestrator-level API key check when apiKey param is provided', async () => {
       // The orchestrator's own check uses params.apiKey, so it does NOT throw
-      // immediately — but the FreelyCodexTool reads OPENAI_API_KEY from
-      // localStorage independently. Without the key in storage the tool returns
-      // an error result which propagates as a thrown error from the generator.
-      await expect(
-        collectAll(
-          orchestrator.execute({
-            toolType: 'codex',
-            userMessage: 'Hello!',
-            apiKey: 'sk-direct',
-          })
-        )
-      ).rejects.toThrow('OPENAI_API_KEY not found');
+      // immediately. The apiKey is now forwarded as apiKeyOverride to the tool,
+      // so the tool also succeeds. In non-Tauri context the tool returns a
+      // placeholder result and the generator yields nothing.
+      const chunks = await collectAll(
+        orchestrator.execute({
+          toolType: 'codex',
+          userMessage: 'Hello!',
+          apiKey: 'sk-direct',
+        })
+      );
+      expect(chunks).toEqual([]);
     });
   });
 
