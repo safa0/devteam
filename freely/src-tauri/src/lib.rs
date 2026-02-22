@@ -1,5 +1,4 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-mod activate;
 mod agents;
 mod api;
 mod capture;
@@ -88,21 +87,12 @@ pub fn run() {
             shortcuts::set_app_icon_visibility,
             shortcuts::set_always_on_top,
             shortcuts::exit_app,
-            activate::activate_license_api,
-            activate::deactivate_license_api,
-            activate::validate_license_api,
-            activate::mask_license_key_cmd,
-            activate::get_checkout_url,
-            activate::secure_storage_save,
-            activate::secure_storage_get,
-            activate::secure_storage_remove,
             api::transcribe_audio,
             api::chat_stream_response,
             api::fetch_models,
             api::fetch_prompts,
             api::create_system_prompt,
             api::check_license_status,
-            api::get_activity,
             speaker::start_system_audio_capture,
             speaker::stop_system_audio_capture,
             speaker::manual_stop_continuous,

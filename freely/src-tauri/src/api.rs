@@ -99,13 +99,3 @@ pub async fn check_license_status(_app: AppHandle) -> Result<bool, String> {
     Ok(true)
 }
 
-// Activity API removed - returns empty data
-#[allow(dead_code)]
-#[tauri::command]
-pub async fn get_activity(_app: AppHandle) -> Result<serde_json::Value, String> {
-    Ok(serde_json::json!({
-        "success": true,
-        "data": [],
-        "total_tokens_used": 0
-    }))
-}
