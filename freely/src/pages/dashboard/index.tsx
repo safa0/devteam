@@ -1,4 +1,4 @@
-import { PluelyApiSetup } from "./components";
+import { Usage } from "./components";
 import { PageLayout } from "@/layouts";
 
 const Dashboard = () => {
@@ -7,8 +7,12 @@ const Dashboard = () => {
       title="Dashboard"
       description="Configure your AI providers and settings."
     >
-      {/* Freely API Setup */}
-      <PluelyApiSetup />
+      <Usage
+        loading={false}
+        onRefresh={() => {}}
+        data={[]}
+        totalTokens={0}
+      />
     </PageLayout>
   );
 };

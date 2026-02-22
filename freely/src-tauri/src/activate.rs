@@ -1,33 +1,7 @@
-use crate::api::get_stored_credentials;
 use serde::{Deserialize, Serialize};
-use std::env;
 use std::fs;
 use std::path::PathBuf;
 use tauri::{AppHandle, Manager};
-use tauri_plugin_machine_uid::MachineUidExt;
-use uuid::Uuid;
-
-fn get_payment_endpoint() -> Result<String, String> {
-    if let Ok(endpoint) = env::var("PAYMENT_ENDPOINT") {
-        return Ok(endpoint);
-    }
-
-    match option_env!("PAYMENT_ENDPOINT") {
-        Some(endpoint) => Ok(endpoint.to_string()),
-        None => Err("PAYMENT_ENDPOINT environment variable not set. Please ensure it's set during the build process.".to_string())
-    }
-}
-
-fn get_api_access_key() -> Result<String, String> {
-    if let Ok(key) = env::var("API_ACCESS_KEY") {
-        return Ok(key);
-    }
-
-    match option_env!("API_ACCESS_KEY") {
-        Some(key) => Ok(key.to_string()),
-        None => Err("API_ACCESS_KEY environment variable not set. Please ensure it's set during the build process.".to_string())
-    }
-}
 
 // Secure storage functions using Tauri's app data directory
 fn get_secure_storage_path(app: &AppHandle) -> Result<PathBuf, String> {
@@ -151,14 +125,6 @@ pub async fn secure_storage_remove(app: AppHandle, keys: Vec<String>) -> Result<
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct ActivationRequest {
-    license_key: String,
-    instance_name: String,
-    machine_id: String,
-    app_version: String,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
 pub struct ActivationResponse {
     activated: bool,
     error: Option<String>,
@@ -188,190 +154,29 @@ pub struct CheckoutResponse {
     error: Option<String>,
 }
 
+// License activation removed - returns error as no-op
 #[tauri::command]
 pub async fn activate_license_api(
-    app: AppHandle,
-    license_key: String,
+    _app: AppHandle,
+    _license_key: String,
 ) -> Result<ActivationResponse, String> {
-    // Get payment endpoint and API access key from environment
-    let payment_endpoint = get_payment_endpoint()?;
-    let api_access_key = get_api_access_key()?;
-
-    // Generate UUID for instance name
-    let instance_name = Uuid::new_v4().to_string();
-    let machine_id: String = app.machine_uid().get_machine_uid().unwrap().id.unwrap();
-    let app_version: String = env!("CARGO_PKG_VERSION").to_string();
-    // Prepare activation request
-    let activation_request = ActivationRequest {
-        license_key: license_key.clone(),
-        instance_name: instance_name.clone(),
-        machine_id: machine_id.clone(),
-        app_version: app_version.clone(),
-    };
-
-    // Make HTTP request to activation endpoint with authorization header
-    let client = reqwest::Client::new();
-    let url = format!("{}/activate", payment_endpoint);
-
-    let response = client
-        .post(&url)
-        .header("Content-Type", "application/json")
-        .header("Authorization", format!("Bearer {}", api_access_key))
-        .json(&activation_request)
-        .send()
-        .await
-        .map_err(|e| {
-            let error_msg = format!("{}", e);
-            if error_msg.contains("url (") {
-                // Remove the URL part from the error message
-                let parts: Vec<&str> = error_msg.split(" for url (").collect();
-                if parts.len() > 1 {
-                    format!("Failed to make chat request: {}", parts[0])
-                } else {
-                    format!("Failed to make chat request: {}", error_msg)
-                }
-            } else {
-                format!("Failed to make chat request: {}", error_msg)
-            }
-        })?;
-
-    let activation_response: ActivationResponse = response.json().await.map_err(|e| {
-        let error_msg = format!("{}", e);
-        if error_msg.contains("url (") {
-            // Remove the URL part from the error message
-            let parts: Vec<&str> = error_msg.split(" for url (").collect();
-            if parts.len() > 1 {
-                format!("Failed to make chat request: {}", parts[0])
-            } else {
-                format!("Failed to make chat request: {}", error_msg)
-            }
-        } else {
-            format!("Failed to make chat request: {}", error_msg)
-        }
-    })?;
-    Ok(activation_response)
+    Err("License activation has been removed.".to_string())
 }
 
+// License deactivation removed - returns error as no-op
 #[tauri::command]
-pub async fn deactivate_license_api(app: AppHandle) -> Result<ActivationResponse, String> {
-    // Get payment endpoint and API access key from environment
-    let payment_endpoint = get_payment_endpoint()?;
-    let api_access_key = get_api_access_key()?;
-    let machine_id: String = app.machine_uid().get_machine_uid().unwrap().id.unwrap();
-    let (license_key, instance_id, _) = get_stored_credentials(&app).await?;
-    let app_version: String = env!("CARGO_PKG_VERSION").to_string();
-    let deactivation_request = ActivationRequest {
-        license_key: license_key.clone(),
-        instance_name: instance_id.clone(),
-        machine_id: machine_id.clone(),
-        app_version: app_version.clone(),
-    };
-    // Make HTTP request to activation endpoint with authorization header
-    let client = reqwest::Client::new();
-    let url = format!("{}/deactivate", payment_endpoint);
-
-    let response = client
-        .post(&url)
-        .header("Content-Type", "application/json")
-        .header("Authorization", format!("Bearer {}", api_access_key))
-        .json(&deactivation_request)
-        .send()
-        .await
-        .map_err(|e| {
-            let error_msg = format!("{}", e);
-            if error_msg.contains("url (") {
-                // Remove the URL part from the error message
-                let parts: Vec<&str> = error_msg.split(" for url (").collect();
-                if parts.len() > 1 {
-                    format!("Failed to make chat request: {}", parts[0])
-                } else {
-                    format!("Failed to make chat request: {}", error_msg)
-                }
-            } else {
-                format!("Failed to make chat request: {}", error_msg)
-            }
-        })?;
-    let deactivation_response: ActivationResponse = response.json().await.map_err(|e| {
-        let error_msg = format!("{}", e);
-        if error_msg.contains("url (") {
-            // Remove the URL part from the error message
-            let parts: Vec<&str> = error_msg.split(" for url (").collect();
-            if parts.len() > 1 {
-                format!("Failed to make chat request: {}", parts[0])
-            } else {
-                format!("Failed to make chat request: {}", error_msg)
-            }
-        } else {
-            format!("Failed to make chat request: {}", error_msg)
-        }
-    })?;
-    Ok(deactivation_response)
+pub async fn deactivate_license_api(_app: AppHandle) -> Result<ActivationResponse, String> {
+    Err("License deactivation has been removed.".to_string())
 }
 
+// License validation removed - always returns active
 #[tauri::command]
-pub async fn validate_license_api(app: AppHandle) -> Result<ValidateResponse, String> {
-    // Get payment endpoint and API access key from environment
-    let payment_endpoint = get_payment_endpoint()?;
-    let api_access_key = get_api_access_key()?;
-    let machine_id: String = app.machine_uid().get_machine_uid().unwrap().id.unwrap();
-    let (license_key, instance_id, _) = get_stored_credentials(&app).await?;
-    let app_version: String = env!("CARGO_PKG_VERSION").to_string();
-    let validate_request = ActivationRequest {
-        license_key: license_key.clone(),
-        instance_name: instance_id.clone(),
-        machine_id: machine_id.clone(),
-        app_version: app_version.clone(),
-    };
-
-    if license_key.is_empty() || instance_id.is_empty() {
-        return Ok(ValidateResponse {
-            is_active: false,
-            last_validated_at: None,
-            is_dev_license: false,
-        });
-    }
-
-    // Make HTTP request to validate endpoint with authorization header
-    let client = reqwest::Client::new();
-    let url = format!("{}/validate", payment_endpoint);
-
-    let response = client
-        .post(&url)
-        .header("Content-Type", "application/json")
-        .header("Authorization", format!("Bearer {}", api_access_key))
-        .json(&validate_request)
-        .send()
-        .await
-        .map_err(|e| {
-            let error_msg = format!("{}", e);
-            if error_msg.contains("url (") {
-                // Remove the URL part from the error message
-                let parts: Vec<&str> = error_msg.split(" for url (").collect();
-                if parts.len() > 1 {
-                    format!("Failed to make chat request: {}", parts[0])
-                } else {
-                    format!("Failed to make chat request: {}", error_msg)
-                }
-            } else {
-                format!("Failed to make chat request: {}", error_msg)
-            }
-        })?;
-
-    let validate_response: ValidateResponse = response.json().await.map_err(|e| {
-        let error_msg = format!("{}", e);
-        if error_msg.contains("url (") {
-            // Remove the URL part from the error message
-            let parts: Vec<&str> = error_msg.split(" for url (").collect();
-            if parts.len() > 1 {
-                format!("Failed to make chat request: {}", parts[0])
-            } else {
-                format!("Failed to make chat request: {}", error_msg)
-            }
-        } else {
-            format!("Failed to make chat request: {}", error_msg)
-        }
-    })?;
-    Ok(validate_response)
+pub async fn validate_license_api(_app: AppHandle) -> Result<ValidateResponse, String> {
+    Ok(ValidateResponse {
+        is_active: true,
+        last_validated_at: None,
+        is_dev_license: false,
+    })
 }
 
 #[tauri::command]
@@ -387,51 +192,8 @@ pub fn mask_license_key_cmd(license_key: String) -> String {
     format!("{}{}{}", first_four, middle_stars, last_four)
 }
 
+// Checkout URL removed - returns error as no-op
 #[tauri::command]
 pub async fn get_checkout_url() -> Result<CheckoutResponse, String> {
-    // Get payment endpoint and API access key from environment
-    let payment_endpoint = get_payment_endpoint()?;
-    let api_access_key = get_api_access_key()?;
-
-    // Make HTTP request to checkout endpoint with authorization header
-    let client = reqwest::Client::new();
-    let url = format!("{}/checkout", payment_endpoint);
-
-    let response = client
-        .post(&url)
-        .header("Content-Type", "application/json")
-        .header("Authorization", format!("Bearer {}", api_access_key))
-        .json(&serde_json::json!({}))
-        .send()
-        .await
-        .map_err(|e| {
-            let error_msg = format!("{}", e);
-            if error_msg.contains("url (") {
-                // Remove the URL part from the error message
-                let parts: Vec<&str> = error_msg.split(" for url (").collect();
-                if parts.len() > 1 {
-                    format!("Failed to make chat request: {}", parts[0])
-                } else {
-                    format!("Failed to make chat request: {}", error_msg)
-                }
-            } else {
-                format!("Failed to make chat request: {}", error_msg)
-            }
-        })?;
-
-    let checkout_response: CheckoutResponse = response.json().await.map_err(|e| {
-        let error_msg = format!("{}", e);
-        if error_msg.contains("url (") {
-            // Remove the URL part from the error message
-            let parts: Vec<&str> = error_msg.split(" for url (").collect();
-            if parts.len() > 1 {
-                format!("Failed to make chat request: {}", parts[0])
-            } else {
-                format!("Failed to make chat request: {}", error_msg)
-            }
-        } else {
-            format!("Failed to make chat request: {}", error_msg)
-        }
-    })?;
-    Ok(checkout_response)
+    Err("Checkout has been removed.".to_string())
 }

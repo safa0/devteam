@@ -6,7 +6,6 @@ import {
   saveConversation,
   getConversationById,
   generateConversationTitle,
-  shouldUsePluelyAPI,
   MESSAGE_ID_OFFSET,
   generateMessageId,
   generateRequestId,
@@ -175,11 +174,10 @@ export const useChatCompletion = (
           });
         }
 
-        const usePluelyAPI = await shouldUsePluelyAPI();
         const usingAgentProvider = isAgentProvider(selectedAIProvider.provider);
 
         // Check if AI provider is configured
-        if (!selectedAIProvider.provider && !usePluelyAPI) {
+        if (!selectedAIProvider.provider) {
           setState((prev) => ({
             ...prev,
             error: "Please select an AI provider in settings",
@@ -191,7 +189,7 @@ export const useChatCompletion = (
         const provider = allAiProviders.find(
           (p) => p.id === selectedAIProvider.provider
         );
-        if (!provider && !usePluelyAPI && !usingAgentProvider) {
+        if (!provider && !usingAgentProvider) {
           setState((prev) => ({
             ...prev,
             error: "Invalid provider selected",
@@ -232,7 +230,7 @@ export const useChatCompletion = (
           // Use the fetchAIResponse function with signal.
           // Agent-backed providers are routed inside fetchAIResponse via the orchestrator.
           for await (const chunk of fetchAIResponse({
-            provider: usePluelyAPI || usingAgentProvider ? undefined : provider,
+            provider: usingAgentProvider ? undefined : provider,
             selectedProvider: selectedAIProvider,
             systemPrompt: systemPrompt || undefined,
             history: messageHistory,

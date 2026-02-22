@@ -37,7 +37,7 @@ pub struct LicenseState {
 impl Default for LicenseState {
     fn default() -> Self {
         LicenseState {
-            has_active_license: AtomicBool::new(false),
+            has_active_license: AtomicBool::new(true),
         }
     }
 }
