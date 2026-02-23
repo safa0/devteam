@@ -39,11 +39,11 @@ jobs:
       - name: Install frontend deps
         run: npm ci
 
-      - name: Generate ephemeral signing key for CI build
+      - name: Generate CI-only signing key
         run: |
-          KEY=$(npx tauri signer generate --ci 2>&1 | grep -A1 'Private:' | tail -1)
-          echo "TAURI_SIGNING_PRIVATE_KEY=$KEY" >> $GITHUB_ENV
-          echo "TAURI_SIGNING_PRIVATE_KEY_PASSWORD=" >> $GITHUB_ENV
+          npx tauri signer generate -w /tmp/ci-signing-key -p "ci" --force
+          echo "TAURI_SIGNING_PRIVATE_KEY=$(cat /tmp/ci-signing-key)" >> $GITHUB_ENV
+          echo "TAURI_SIGNING_PRIVATE_KEY_PASSWORD=ci" >> $GITHUB_ENV
 
       - name: Build Tauri app
         run: npx tauri build --target aarch64-apple-darwin
