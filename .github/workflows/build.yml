@@ -3,7 +3,7 @@ name: Build
 on:
   push:
     branches: [main]
-    paths: ['freely/**']
+    paths: ['freely/**', '.github/workflows/build.yml']
 
 jobs:
   build-macos:
@@ -38,6 +38,12 @@ jobs:
 
       - name: Install frontend deps
         run: npm ci
+
+      - name: Generate CI-only signing key
+        run: |
+          npx tauri signer generate -w /tmp/ci-signing-key -p "ci" --force
+          echo "TAURI_SIGNING_PRIVATE_KEY=$(cat /tmp/ci-signing-key)" >> $GITHUB_ENV
+          echo "TAURI_SIGNING_PRIVATE_KEY_PASSWORD=ci" >> $GITHUB_ENV
 
       - name: Build Tauri app
         run: npx tauri build --target aarch64-apple-darwin

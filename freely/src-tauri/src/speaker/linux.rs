@@ -14,7 +14,7 @@ use libpulse_binding as pulse;
 use libpulse_simple_binding as psimple;
 
 use psimple::Simple;
-use pulse::context::introspect::Introspector;
+
 use pulse::context::Context;
 use pulse::mainloop::standard::Mainloop;
 use pulse::sample::{Format, Spec};

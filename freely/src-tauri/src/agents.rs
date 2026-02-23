@@ -117,6 +117,7 @@ pub struct AgentPayload {
     pub session_id: String,
     pub prompt: String,
     #[serde(rename = "taskId")]
+    #[allow(dead_code)]
     pub task_id: Option<String>,
     #[serde(rename = "permissionMode")]
     pub permission_mode: Option<String>,

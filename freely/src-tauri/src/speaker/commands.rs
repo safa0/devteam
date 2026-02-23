@@ -234,13 +234,11 @@ async fn run_vad_capture(
                                     warn!("Failed to emit audio-encoding-error: {}", e);
                                 }
                             }
-                        } else {
-                            if let Err(e) = app.emit(
-                                "speech-discarded",
-                                "Audio too short (likely background noise)",
-                            ) {
-                                warn!("Failed to emit speech-discarded: {}", e);
-                            }
+                        } else if let Err(e) = app.emit(
+                            "speech-discarded",
+                            "Audio too short (likely background noise)",
+                        ) {
+                            warn!("Failed to emit speech-discarded: {}", e);
                         }
 
                         // Reset for next speech detection
