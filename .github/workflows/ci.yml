@@ -3,10 +3,10 @@ name: CI
 on:
   pull_request:
     branches: [main]
-    paths: ['freely/**']
+    paths: ['freely/**', '.github/workflows/ci.yml']
   push:
     branches: [main]
-    paths: ['freely/**']
+    paths: ['freely/**', '.github/workflows/ci.yml']
 
 jobs:
   frontend:

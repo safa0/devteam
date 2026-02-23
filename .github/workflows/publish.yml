@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-    paths: ['freely/**']
+    paths: ['freely/**', '.github/workflows/publish.yml']
 
 jobs:
   publish-tauri:
