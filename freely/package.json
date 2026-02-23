@@ -9,13 +9,13 @@
     "url": "https://www.srikanthnani.com"
   },
   "license": "GPL-3.0",
-  "homepage": "https://github.com/iamsrikanthnani/pluely#readme",
+  "homepage": "https://github.com/lambdaflows/freely#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/iamsrikanthnani/pluely.git"
+    "url": "git+https://github.com/lambdaflows/freely.git"
   },
   "bugs": {
-    "url": "https://github.com/iamsrikanthnani/pluely/issues"
+    "url": "https://github.com/lambdaflows/freely/issues"
   },
   "keywords": [
     "ai-assistant",
