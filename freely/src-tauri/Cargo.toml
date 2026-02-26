@@ -48,6 +48,7 @@ futures-util = "0.3"
 anyhow = "1.0"
 tracing = "0.1"
 ringbuf = "0.4.8"
+parking_lot = "0.12"
 tauri-plugin-shell = "2.3.1"
 whisper-rs = { version = "0.13", features = ["coreml"] }
 tauri-plugin-sql = { version = "2", features = ["sqlite"] }

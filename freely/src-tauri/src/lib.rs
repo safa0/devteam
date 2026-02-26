@@ -7,6 +7,7 @@ mod db;
 mod shortcuts;
 mod window;
 use std::sync::{Arc, Mutex};
+use parking_lot::Mutex as PLMutex;
 use tauri::{AppHandle, Manager};
 #[cfg(target_os = "macos")]
 use tauri::WebviewWindow;
@@ -28,7 +29,7 @@ pub struct AudioState {
 }
 
 pub struct WhisperState {
-    pub engine: Mutex<speaker::local_whisper::WhisperEngine>,
+    pub engine: PLMutex<Option<speaker::local_whisper::WhisperEngine>>,
 }
 
 #[tauri::command]
@@ -50,7 +51,7 @@ pub fn run() {
         .manage(AudioState::default())
         .manage(CaptureState::default())
         .manage(WhisperState {
-            engine: Mutex::new(speaker::local_whisper::WhisperEngine::new()),
+            engine: PLMutex::new(None),
         })
         .manage(agents::AgentProcessRegistry::default())
         .manage(shortcuts::WindowVisibility {

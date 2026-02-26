@@ -68,7 +68,13 @@ impl WhisperEngine {
         Ok(())
     }
 
-    pub fn transcribe(&self, audio_f32: &[f32], _sample_rate: u32) -> Result<String, String> {
+    pub fn transcribe(&self, audio_f32: &[f32], sample_rate: u32) -> Result<String, String> {
+        if sample_rate != 16000 {
+            return Err(format!(
+                "Unsupported sample rate {}; Whisper requires 16000 Hz",
+                sample_rate
+            ));
+        }
         let ctx = self.context.as_ref().ok_or("Whisper not initialized")?;
         let mut state = ctx
             .create_state()
@@ -117,10 +123,8 @@ use tauri::{AppHandle, Manager};
 #[tauri::command]
 pub async fn init_local_whisper(app: AppHandle, model_path: String) -> Result<(), String> {
     let state = app.state::<crate::WhisperState>();
-    let mut engine = state
-        .engine
-        .lock()
-        .map_err(|e| format!("Lock error: {}", e))?;
+    let mut slot = state.engine.lock();
+    let engine = slot.get_or_insert_with(WhisperEngine::new);
     engine.init(PathBuf::from(model_path))
 }
 
@@ -128,33 +132,40 @@ pub async fn init_local_whisper(app: AppHandle, model_path: String) -> Result<()
 pub async fn transcribe_local(app: AppHandle, audio_b64: String) -> Result<String, String> {
     use base64::{engine::general_purpose::STANDARD as B64, Engine as _};
 
-    let state = app.state::<crate::WhisperState>();
-    let engine = state
-        .engine
-        .lock()
-        .map_err(|e| format!("Lock error: {}", e))?;
-
+    // Decode base64 and WAV before acquiring the lock so we don't hold the
+    // mutex across expensive CPU-bound work.
     let wav_bytes = B64
         .decode(&audio_b64)
         .map_err(|e| format!("Base64 decode error: {}", e))?;
     let reader = hound::WavReader::new(std::io::Cursor::new(wav_bytes))
         .map_err(|e| format!("WAV decode error: {}", e))?;
-    let spec = reader.spec();
+    let sample_rate = reader.spec().sample_rate;
     let samples: Vec<f32> = reader
         .into_samples::<i16>()
         .filter_map(|s| s.ok())
         .map(|s| s as f32 / i16::MAX as f32)
         .collect();
 
-    engine.transcribe(&samples, spec.sample_rate)
+    // Acquire lock only to call transcribe (which does the heavy Whisper work).
+    // parking_lot::Mutex doesn't poison, so no unwrap/map_err needed.
+    let state = app.state::<crate::WhisperState>();
+    let slot = state.engine.lock();
+    let engine = slot
+        .as_ref()
+        .ok_or("Whisper engine not initialized; call init_local_whisper first")?;
+    engine.transcribe(&samples, sample_rate)
 }
 
 #[tauri::command]
 pub async fn get_local_whisper_status(app: AppHandle) -> Result<WhisperStatus, String> {
     let state = app.state::<crate::WhisperState>();
-    let engine = state
-        .engine
-        .lock()
-        .map_err(|e| format!("Lock error: {}", e))?;
-    Ok(engine.status())
+    let slot = state.engine.lock();
+    Ok(slot
+        .as_ref()
+        .map(|e| e.status())
+        .unwrap_or(WhisperStatus {
+            initialized: false,
+            model: None,
+            model_path: None,
+        }))
 }
