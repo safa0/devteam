@@ -1,4 +1,7 @@
 // Completion-related types
+export type AudioSource = "mic" | "system_audio";
+export type SpeakerLabel = "user" | "interviewer";
+
 export interface AttachedFile {
   id: string;
   name: string;
@@ -13,6 +16,8 @@ export interface ChatMessage {
   content: string;
   timestamp: number;
   attachedFiles?: AttachedFile[];
+  audioSource?: AudioSource;
+  speakerLabel?: SpeakerLabel;
 }
 
 export interface ChatConversation {

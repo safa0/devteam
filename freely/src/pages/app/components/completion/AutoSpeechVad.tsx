@@ -71,8 +71,6 @@ const AutoSpeechVADInternal = ({
         // convert float32array to blob
         const audioBlob = floatArrayToWav(audio, 16000, "wav");
 
-        let transcription: string;
-
         // Check if we have a configured speech provider
         if (!selectedSttProvider.provider || !providerConfig) {
           console.warn("No speech provider selected");
@@ -87,11 +85,13 @@ const AutoSpeechVADInternal = ({
         setIsTranscribing(true);
 
         // Use the fetchSTT function for all providers
-        transcription = await fetchSTT({
+        const result = await fetchSTT({
           provider: providerConfig,
           selectedProvider: selectedSttProvider,
           audio: audioBlob,
+          source: "mic",
         });
+        const transcription = result.text;
 
         if (transcription) {
           submit(transcription);

@@ -255,9 +255,10 @@ export function useSystemAudio() {
               provider: providerConfig,
               selectedProvider: selectedSttProvider,
               audio: audioBlob,
+              source: "system_audio",
             });
 
-            const timeoutPromise = new Promise<string>((_, reject) => {
+            const timeoutPromise = new Promise<never>((_, reject) => {
               setTimeout(
                 () => reject(new Error("Speech transcription timed out (30s)")),
                 30000
@@ -265,10 +266,11 @@ export function useSystemAudio() {
             });
 
             try {
-              const transcription = await Promise.race([
+              const result = await Promise.race([
                 sttPromise,
                 timeoutPromise,
               ]);
+              const transcription = result.text;
 
               if (transcription.trim()) {
                 setLastTranscription(transcription);
@@ -524,6 +526,8 @@ export function useSystemAudio() {
                 role: "user" as const,
                 content: transcription,
                 timestamp,
+                audioSource: "system_audio" as const,
+                speakerLabel: "interviewer" as const,
               },
               {
                 id: generateMessageId("assistant", timestamp + 1),

@@ -153,13 +153,14 @@ export const AudioRecorder = ({
         (p) => p.id === selectedSttProvider.provider
       );
 
-      const text = await fetchSTT({
+      const result = await fetchSTT({
         provider,
         selectedProvider: selectedSttProvider,
         audio: audioBlob,
+        source: "mic",
       });
 
-      onTranscriptionComplete(text);
+      onTranscriptionComplete(result.text);
     } catch (error) {
       console.error("Transcription failed:", error);
       onCancel();

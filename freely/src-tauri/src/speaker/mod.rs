@@ -19,9 +19,11 @@ mod linux;
 use linux::{SpeakerInput as PlatformSpeakerInput, SpeakerStream as PlatformSpeakerStream};
 
 mod commands;
+pub mod local_whisper;
 
 // Re-export commands for tauri handler
 pub use commands::*;
+pub use local_whisper::*;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AudioDevice {

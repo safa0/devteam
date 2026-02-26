@@ -7,9 +7,10 @@ export default defineConfig({
     globals: false,
     setupFiles: ['./vitest.setup.ts'],
     include: ['src/**/*.{test,spec}.ts', 'src/**/*.{test,spec}.tsx'],
+    testTimeout: 30000,
     coverage: {
       provider: 'v8',
-      include: ['src/lib/agents/**'],
+      include: ['src/lib/**', 'src/hooks/**'],
       reporter: ['text', 'lcov'],
     },
   },

@@ -8,6 +8,14 @@ import { fetch as tauriFetch } from "@tauri-apps/plugin-http";
 import { TYPE_PROVIDER } from "@/types";
 import curl2Json from "@bany/curl-to-json";
 
+export type AudioSource = "mic" | "system_audio";
+
+export interface STTResult {
+  text: string;
+  source: AudioSource;
+  timestamp: number;
+}
+
 export interface STTParams {
   provider: TYPE_PROVIDER | undefined;
   selectedProvider: {
@@ -15,13 +23,30 @@ export interface STTParams {
     variables: Record<string, string>;
   };
   audio: File | Blob;
+  source?: AudioSource;
 }
 
 /**
- * Transcribes audio and returns either the transcription or an error/warning message as a single string.
+ * Transcribes audio and returns an STTResult with text, source, and timestamp.
  */
-export async function fetchSTT(params: STTParams): Promise<string> {
+export async function fetchSTT(params: STTParams): Promise<STTResult> {
+  const source = params.source ?? "mic";
   let warnings: string[] = [];
+
+  // Local Whisper: bypass HTTP and invoke Tauri command directly
+  if (
+    params.provider?.id === "local-whisper" ||
+    params.selectedProvider?.provider === "local-whisper"
+  ) {
+    const { invoke } = await import("@tauri-apps/api/core");
+    const buffer = await params.audio.arrayBuffer();
+    const bytes = new Uint8Array(buffer);
+    let binary = "";
+    for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+    const audioB64 = btoa(binary);
+    const text = await invoke<string>("transcribe_local", { audioB64 });
+    return { text: text.trim(), source, timestamp: Date.now() };
+  }
 
   try {
     const { provider, selectedProvider, audio } = params;
@@ -186,7 +211,7 @@ export async function fetchSTT(params: STTParams): Promise<string> {
     try {
       data = JSON.parse(responseText);
     } catch {
-      return [...warnings, responseText.trim()].filter(Boolean).join("; ");
+      return { text: [...warnings, responseText.trim()].filter(Boolean).join("; "), source, timestamp: Date.now() };
     }
 
     // Extract transcription
@@ -195,11 +220,11 @@ export async function fetchSTT(params: STTParams): Promise<string> {
     const transcription = (getByPath(data, path) || "").trim();
 
     if (!transcription) {
-      return [...warnings, "No transcription found"].join("; ");
+      return { text: [...warnings, "No transcription found"].join("; "), source, timestamp: Date.now() };
     }
 
     // Return transcription with any warnings
-    return [...warnings, transcription].filter(Boolean).join("; ");
+    return { text: [...warnings, transcription].filter(Boolean).join("; "), source, timestamp: Date.now() };
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     throw new Error(msg);
